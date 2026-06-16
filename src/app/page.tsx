@@ -32,19 +32,20 @@ export default function MessengerPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  // Fetch user and conversations on mount
   useEffect(() => {
     async function fetchData() {
       try {
         const [convRes, userRes] = await Promise.all([
           fetch('/api/conversations'),
-          fetch('/api/auth/me') // We should add this endpoint or similar
+          fetch('/api/auth/me')
         ]);
 
-        const convData = await convRes.json();
-        setConversations(convData);
-        if (convData.length > 0 && !activeId) {
-          setActiveId(convData[0].id);
+        if (convRes.ok) {
+          const convData = await convRes.json();
+          setConversations(convData);
+          if (convData.length > 0 && !activeId) {
+            setActiveId(convData[0].id);
+          }
         }
 
         if (userRes.ok) {
@@ -60,7 +61,6 @@ export default function MessengerPage() {
     fetchData();
   }, [activeId]);
 
-  // Fetch messages when activeId changes
   useEffect(() => {
     if (activeId) {
       async function fetchMessages() {
@@ -73,8 +73,6 @@ export default function MessengerPage() {
         }
       }
       fetchMessages();
-
-      // Poll for new messages every 3 seconds (lightweight "real-time")
       const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
@@ -83,7 +81,6 @@ export default function MessengerPage() {
   const handleSendMessage = async (text: string) => {
     if (!activeId) return;
 
-    // Optimistic update
     const newMessage: Message = {
       id: Date.now(),
       sender: 'me',
@@ -94,13 +91,11 @@ export default function MessengerPage() {
 
     try {
       await sendMessage(activeId, text);
-      // Update conversations list with last message
       setConversations(prev => prev.map(c =>
         c.id === activeId ? { ...c, last_message: text } : c
       ));
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Remove the optimistic message on error
       setMessages(prev => prev.filter(m => m.id !== newMessage.id));
     }
   };
