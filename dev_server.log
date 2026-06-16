@@ -1,0 +1,57 @@
+
+> out@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 874ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+⨯ The file "./src/proxy.ts" must export a function, either as a default export or as a named "proxy" export.
+This function is what Next.js runs for every request handled by this proxy (previously called middleware).
+
+Why this happens:
+- You are migrating from `middleware` to `proxy`, but haven't updated the exported function.
+- The file exists but doesn't export a function.
+- The export is not a function (e.g., an object or constant).
+- There's a syntax error preventing the export from being recognized.
+
+To fix it:
+- Ensure this file has either a default or "proxy" function export.
+
+Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+⨯ [Error: The Proxy file "/proxy" must export a function named `proxy` or a default function.]
+✓ Compiled in 7ms
+○ Compiling /login ...
+ HEAD /login 200 in 5.8s (next.js: 5.3s, proxy.ts: 94ms, application-code: 416ms)
+ GET /login 200 in 97ms (next.js: 5ms, proxy.ts: 9ms, application-code: 83ms)
+ GET /register 200 in 727ms (next.js: 671ms, proxy.ts: 9ms, application-code: 47ms)
+ GET /login 200 in 71ms (next.js: 5ms, proxy.ts: 7ms, application-code: 59ms)
+ GET /register 200 in 48ms (next.js: 7ms, proxy.ts: 9ms, application-code: 32ms)
+ POST /api/auth/register 200 in 1443ms (next.js: 1087ms, application-code: 356ms)
+ GET / 200 in 1403ms (next.js: 1234ms, proxy.ts: 15ms, application-code: 154ms)
+ GET / 200 in 118ms (next.js: 10ms, proxy.ts: 17ms, application-code: 90ms)
+ POST / 200 in 210ms (next.js: 12ms, proxy.ts: 13ms, application-code: 184ms)
+  └─ ƒ <inline action>({}) in 20ms src/page.tsx
+ POST /api/auth/logout 200 in 296ms (next.js: 279ms, application-code: 17ms)
+ GET /login 200 in 35ms (next.js: 4ms, proxy.ts: 5ms, application-code: 26ms)
+ GET /login 200 in 79ms (next.js: 6ms, proxy.ts: 9ms, application-code: 64ms)
+✓ Compiled in 47ms
+✓ Compiled in 99ms
+✓ Compiled in 41ms
+✓ Compiled in 147ms
+ GET /login 200 in 141ms (next.js: 12ms, proxy.ts: 5ms, application-code: 124ms)
+ GET /register 200 in 61ms (next.js: 6ms, proxy.ts: 11ms, application-code: 44ms)
+ POST /api/auth/register 200 in 176ms (next.js: 6ms, application-code: 171ms)
+ GET / 200 in 69ms (next.js: 6ms, proxy.ts: 9ms, application-code: 54ms)
+ GET / 200 in 69ms (next.js: 5ms, proxy.ts: 9ms, application-code: 55ms)
+ POST / 200 in 95ms (next.js: 3ms, proxy.ts: 11ms, application-code: 80ms)
+  └─ ƒ <inline action>({}) in 15ms src/page.tsx
+ POST /api/auth/logout 200 in 12ms (next.js: 4ms, application-code: 9ms)
+ GET /login 200 in 48ms (next.js: 3ms, proxy.ts: 5ms, application-code: 40ms)
+ GET /login 200 in 65ms (next.js: 11ms, proxy.ts: 13ms, application-code: 40ms)
