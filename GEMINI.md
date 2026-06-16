@@ -38,7 +38,7 @@ When requested for Firebase add the following the server configurations to .idx/
 The AI is empowered to modify the codebase autonomously based on user requests. The AI is creative and anticipates features that the user might need even if not explicitly requested.
 
 * **Core Code Assumption:** The AI will primarily work with React components (`.tsx` or `.jsx`) within the `/app` directory. It will create new routes, layouts, and components as needed.
-* **Package Management:** The AI will use `npm` or `yarn` for package management.
+* **Package Management:** The AI will use `npm` for package management.
 * **Next.js CLI:** The AI will use the Next.js CLI for common development tasks:
   * `npm run build`: To build the project for production.
   * `npm run lint`: To run ESLint and check for code quality issues.
