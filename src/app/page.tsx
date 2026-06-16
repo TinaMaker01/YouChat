@@ -1,75 +1,143 @@
-import { revalidatePath } from 'next/cache';
-import { getSession } from '@/lib/auth';
-import { openDb } from '@/lib/db';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { ChatSidebar } from '@/components/chat-sidebar';
+import { ChatWindow } from '@/components/chat-window';
+import { sendMessage } from '@/lib/actions';
 import { LogoutButton } from '@/components/logout-button';
 
-async function getPosts() {
-  const db = await openDb();
-  return db.all('SELECT * FROM posts ORDER BY created_at DESC');
+interface Conversation {
+  id: number;
+  name: string;
+  avatar: string;
+  last_message: string;
+  updated_at: string;
 }
 
-async function getUser(userId: string) {
-  const db = await openDb();
-  return db.get('SELECT email FROM users WHERE id = ?', userId);
+interface Message {
+  id: number;
+  sender: 'me' | 'them';
+  text: string;
+  created_at: string;
 }
 
-export default async function Home() {
-  const session = await getSession();
-  const posts = await getPosts();
-  const user = session ? await getUser(session.userId) : null;
+interface User {
+  email: string;
+}
 
-  async function createPost(formData: FormData) {
-    'use server';
-    const title = formData.get('title') as string;
-    const content = formData.get('content') as string;
+export default function MessengerPage() {
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-    const db = await openDb();
-    await db.run('INSERT INTO posts (title, content) VALUES (?, ?)', title, content);
+  // Fetch user and conversations on mount
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [convRes, userRes] = await Promise.all([
+          fetch('/api/conversations'),
+          fetch('/api/auth/me') // We should add this endpoint or similar
+        ]);
 
-    revalidatePath('/');
+        const convData = await convRes.json();
+        setConversations(convData);
+        if (convData.length > 0 && !activeId) {
+          setActiveId(convData[0].id);
+        }
+
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
+  }, [activeId]);
+
+  // Fetch messages when activeId changes
+  useEffect(() => {
+    if (activeId) {
+      async function fetchMessages() {
+        try {
+          const res = await fetch(`/api/messages?conversationId=${activeId}`);
+          const data = await res.json();
+          setMessages(data);
+        } catch (error) {
+          console.error('Failed to fetch messages:', error);
+        }
+      }
+      fetchMessages();
+
+      // Poll for new messages every 3 seconds (lightweight "real-time")
+      const interval = setInterval(fetchMessages, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [activeId]);
+
+  const handleSendMessage = async (text: string) => {
+    if (!activeId) return;
+
+    // Optimistic update
+    const newMessage: Message = {
+      id: Date.now(),
+      sender: 'me',
+      text,
+      created_at: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, newMessage]);
+
+    try {
+      await sendMessage(activeId, text);
+      // Update conversations list with last message
+      setConversations(prev => prev.map(c =>
+        c.id === activeId ? { ...c, last_message: text } : c
+      ));
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      // Remove the optimistic message on error
+      setMessages(prev => prev.filter(m => m.id !== newMessage.id));
+    }
+  };
+
+  const activeConversation = conversations.find(c => c.id === activeId) || null;
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-black">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-start bg-zinc-50 font-sans dark:bg-black p-8">
-      <div className="w-full max-w-lg flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold text-zinc-900 dark:text-white">Simple Blog</h1>
+    <main className="flex flex-col h-screen bg-white dark:bg-black overflow-hidden">
+      <header className="flex justify-between items-center p-4 border-b dark:border-zinc-800">
+        <h1 className="text-xl font-bold">Messenger</h1>
         {user && (
           <div className="flex items-center gap-4">
             <span className="text-sm text-zinc-600 dark:text-zinc-400">{user.email}</span>
             <LogoutButton />
           </div>
         )}
+      </header>
+      <div className="flex flex-1 overflow-hidden">
+        <ChatSidebar
+          conversations={conversations}
+          activeConversationId={activeId}
+          onSelectConversation={setActiveId}
+        />
+        <ChatWindow
+          conversation={activeConversation}
+          messages={messages}
+          onSendMessage={handleSendMessage}
+        />
       </div>
-
-      <form action={createPost} className="w-full max-w-lg mb-8">
-        <div className="flex flex-col gap-4">
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            className="p-2 rounded-md bg-gray-800 text-white"
-            required
-          />
-          <textarea
-            name="content"
-            placeholder="Content"
-            className="p-2 rounded-md bg-gray-800 text-white h-32"
-            required
-          ></textarea>
-          <button type="submit" className="p-2 rounded-md bg-blue-600 hover:bg-blue-700 transition-colors text-white">
-            Create Post
-          </button>
-        </div>
-      </form>
-
-      <div className="w-full max-w-lg">
-        {posts.map((post: { id: number; title: string; content: string }) => (
-          <div key={post.id} className="p-4 mb-4 rounded-md bg-gray-800">
-            <h2 className="text-2xl font-bold">{post.title}</h2>
-            <p className="text-gray-300">{post.content}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    </main>
   );
 }
