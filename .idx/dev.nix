@@ -6,9 +6,6 @@
   # Use https://search.nixos.org/packages to find packages
   packages = [
     pkgs.nodejs_22
-    pkgs.yarn
-    pkgs.nodePackages.pnpm
-    pkgs.bun
   ];
   # Sets environment variables in the workspace
   env = {};
