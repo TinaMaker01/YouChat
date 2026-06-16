@@ -55,7 +55,7 @@ export default async function Home() {
       </form>
 
       <div className="w-full max-w-lg">
-        {posts.map((post: any) => (
+        {posts.map((post: { id: number; title: string; content: string }) => (
           <div key={post.id} className="p-4 mb-4 rounded-md bg-gray-800">
             <h2 className="text-2xl font-bold">{post.title}</h2>
             <p>{post.content}</p>
