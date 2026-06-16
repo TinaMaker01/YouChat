@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ChatSidebar } from '@/components/chat-sidebar';
 import { ChatWindow } from '@/components/chat-window';
 import { sendMessage } from '@/lib/actions';
+import { LogoutButton } from '@/components/logout-button';
 
 interface Conversation {
   id: number;
@@ -20,29 +21,45 @@ interface Message {
   created_at: string;
 }
 
+interface User {
+  email: string;
+}
+
 export default function MessengerPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-  // Fetch conversations on mount
+  // Fetch conversations and user on mount
   useEffect(() => {
-    async function fetchConversations() {
+    async function fetchData() {
       try {
-        const res = await fetch('/api/conversations');
-        const data = await res.json();
-        setConversations(data);
-        if (data.length > 0 && !activeId) {
-          setActiveId(data[0].id);
+        const [convRes, userRes] = await Promise.all([
+          fetch('/api/conversations'),
+          fetch('/api/auth/me')
+        ]);
+
+        if (convRes.ok) {
+          const convData = await convRes.json();
+          setConversations(convData);
+          if (convData.length > 0 && !activeId) {
+            setActiveId(convData[0].id);
+          }
+        }
+
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          setUser(userData);
         }
       } catch (error) {
-        console.error('Failed to fetch conversations:', error);
+        console.error('Failed to fetch data:', error);
       } finally {
         setIsLoading(false);
       }
     }
-    fetchConversations();
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,17 +119,28 @@ export default function MessengerPage() {
   }
 
   return (
-    <main className="flex h-screen bg-white dark:bg-black overflow-hidden">
-      <ChatSidebar
-        conversations={conversations}
-        activeConversationId={activeId}
-        onSelectConversation={setActiveId}
-      />
-      <ChatWindow
-        conversation={activeConversation}
-        messages={messages}
-        onSendMessage={handleSendMessage}
-      />
+    <main className="flex flex-col h-screen bg-white dark:bg-black overflow-hidden">
+      <header className="flex justify-between items-center p-4 border-b dark:border-zinc-800">
+        <h1 className="text-xl font-bold">Messenger</h1>
+        {user && (
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-zinc-600 dark:text-zinc-400">{user.email}</span>
+            <LogoutButton />
+          </div>
+        )}
+      </header>
+      <div className="flex flex-1 overflow-hidden">
+        <ChatSidebar
+          conversations={conversations}
+          activeConversationId={activeId}
+          onSelectConversation={setActiveId}
+        />
+        <ChatWindow
+          conversation={activeConversation}
+          messages={messages}
+          onSendMessage={handleSendMessage}
+        />
+      </div>
     </main>
   );
 }

@@ -3,10 +3,22 @@ import { openDb } from './lib/db';
 async function init() {
   const db = await openDb();
 
-  // Drop old table if exists
-  await db.exec(`DROP TABLE IF EXISTS posts;`);
+  // Drop old tables to start fresh
+  await db.exec(`
+    DROP TABLE IF EXISTS posts;
+    DROP TABLE IF EXISTS messages;
+    DROP TABLE IF EXISTS conversations;
+    DROP TABLE IF EXISTS users;
+  `);
 
   await db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
     CREATE TABLE IF NOT EXISTS conversations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
@@ -45,7 +57,7 @@ async function init() {
   await db.run(`INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)`, 3, 'me', 'Hey Charlie');
   await db.run(`INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)`, 3, 'them', 'Let\'s grab coffee later.');
 
-  console.log('Database initialized with Messenger schema and seed data.');
+  console.log('Database initialized with Auth and Messenger schema.');
 }
 
 init().catch(console.error);
