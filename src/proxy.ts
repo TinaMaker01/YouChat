@@ -25,7 +25,7 @@ export async function proxy(request: NextRequest) {
       await jwtVerify(session, JWT_SECRET, {
         algorithms: ['HS256'],
       });
-    } catch (error) {
+    } catch {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }
@@ -36,7 +36,7 @@ export async function proxy(request: NextRequest) {
         algorithms: ['HS256'],
       });
       return NextResponse.redirect(new URL('/', request.url));
-    } catch (error) {
+    } catch {
       // Invalid session, let them go to auth routes
     }
   }

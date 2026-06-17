@@ -1,18 +1,31 @@
-# Chatbot Application Blueprint
+# Messenger Application Blueprint
 
 ## Overview
 
-This document outlines the plan for creating a chatbot application. The application will allow users to register and log in, and then have a conversation with a chatbot. The application will be built using Next.js, Prisma, and NextAuth.js.
+A real-time Messenger-like chat application built with Next.js 16 (App Router), React 19, and SQLite. The application features user authentication, private messaging, and a modern, responsive UI.
 
 ## Project Outline
 
-*   **Authentication:** Users will be able to register and log in using their email and password, or with their Google account.
-*   **Chat Interface:** The chat interface will allow users to send messages to the chatbot and receive responses.
-*   **Database:** The application will use a SQLite database to store user information and conversation history.
+*   **Authentication:** Custom JWT-based authentication system. Users can register with email and password and log in to access their chats. Sessions are stored in secure HttpOnly cookies.
+*   **Chat Interface:** A responsive two-column layout. The sidebar lists active conversations, and the main window displays messages and allows for sending new ones.
+*   **Database:** Uses SQLite for local data persistence.
+    *   `users`: Stores user credentials and profile information.
+    *   `conversations`: Stores metadata about chat groups or direct messages.
+    *   `messages`: Stores individual chat messages linked to conversations.
+*   **Interactivity:** Uses `framer-motion` for smooth UI transitions and `lucide-react` for iconography. Styled with Tailwind CSS and Radix UI components.
 
-## Plan
+## Technical Implementation Details
 
-1.  **Set up the database:** I will configure Prisma to use a SQLite database and then run the initial database migration.
-2.  **Set up authentication:** I will install and configure NextAuth.js to handle user authentication.
-3.  **Build the UI:** I will create the necessary React components for the login, registration, and chat pages.
-4.  **Implement the chat functionality:** I will create a Server Action to handle user messages and then use the OpenAI API to generate a response.
+- **Framework:** Next.js 16 (App Router)
+- **State Management:** React hooks (`useState`, `useEffect`) and optimistic updates for messaging.
+- **Data Mutation:** Server Actions for sending messages.
+- **Real-time:** Lightweight polling (every 3 seconds) for new messages.
+- **Security:** API routes are protected by session verification. Passwords are hashed using `bcryptjs`.
+
+## Plan (Completed & Ongoing Improvements)
+
+1.  **Set up Database & Auth:** Initialized SQLite schema and implemented custom JWT session management.
+2.  **Build Messenger UI:** Created `ChatSidebar`, `ChatWindow`, and `MessageBubble` components.
+3.  **Implement Messaging:** Integrated Server Actions and API routes for message handling.
+4.  **Security Hardening:** (Ongoing) Securing API routes and improving input validation.
+5.  **Performance Optimization:** (Ongoing) Moving to server-side data fetching where possible.
