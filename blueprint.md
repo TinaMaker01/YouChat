@@ -2,17 +2,26 @@
 
 ## Overview
 
-This document outlines the plan for creating a chatbot application. The application will allow users to register and log in, and then have a conversation with a chatbot. The application will be built using Next.js, Prisma, and NextAuth.js.
+This document outlines the plan for creating a chatbot application. The application allows users to register and log in, and then have a conversation with a chatbot. The application is built using Next.js 16, SQLite, and custom JWT authentication.
 
 ## Project Outline
 
-*   **Authentication:** Users will be able to register and log in using their email and password, or with their Google account.
-*   **Chat Interface:** The chat interface will allow users to send messages to the chatbot and receive responses.
-*   **Database:** The application will use a SQLite database to store user information and conversation history.
+*   **Authentication:** Users can register and log in using their email and password. (COMPLETED)
+*   **Chat Interface:** A modern messenger-style interface for real-time conversation. (COMPLETED)
+*   **Database:** SQLite database stores user information, conversations, and message history. (COMPLETED)
+*   **Chatbot Integration:** AI-powered responses (PLANNED - OpenAI integration).
 
-## Plan
+## Current Implementation Details
 
-1.  **Set up the database:** I will configure Prisma to use a SQLite database and then run the initial database migration.
-2.  **Set up authentication:** I will install and configure NextAuth.js to handle user authentication.
-3.  **Build the UI:** I will create the necessary React components for the login, registration, and chat pages.
-4.  **Implement the chat functionality:** I will create a Server Action to handle user messages and then use the OpenAI API to generate a response.
+- **Framework:** Next.js 16 (App Router)
+- **Database:** SQLite (local `db.sqlite`)
+- **Authentication:** Custom JWT sessions stored in cookies.
+- **Styling:** Tailwind CSS 4 & Lucide icons.
+
+## Plan & Progress
+
+1.  **Set up the database:** (DONE) Configured SQLite with tables for users, conversations, and messages.
+2.  **Set up authentication:** (DONE) Implemented secure login/register routes and session middleware.
+3.  **Build the UI:** (DONE) Created responsive chat sidebar, message window, and auth pages.
+4.  **Implement the chat functionality:** (PARTIAL) Basic peer-to-peer messaging implemented. OpenAI integration is the next major step.
+5.  **Audit and Optimization:** (IN PROGRESS) Cleaning up unused resources and improving code quality.

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface Conversation {
   id: number;
@@ -42,9 +43,11 @@ export function ChatSidebar({ conversations, activeConversationId, onSelectConve
             whileTap={{ scale: 0.98 }}
           >
             <div className="relative">
-              <img
+              <Image
                 src={conv.avatar}
                 alt={conv.name}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800"
               />
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-black rounded-full"></div>

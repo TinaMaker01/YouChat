@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { MessageBubble } from './message-bubble';
 import { ChatInput } from './chat-input';
 import { Phone, Video, Info } from 'lucide-react';
+import Image from 'next/image';
 
 interface Message {
   id: number;
@@ -51,9 +52,11 @@ export function ChatWindow({ conversation, messages, onSendMessage }: ChatWindow
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-800 shadow-sm">
         <div className="flex items-center gap-3">
-          <img
+          <Image
             src={conversation.avatar}
             alt={conversation.name}
+            width={40}
+            height={40}
             className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800"
           />
           <div>
@@ -80,9 +83,11 @@ export function ChatWindow({ conversation, messages, onSendMessage }: ChatWindow
         className="flex-1 overflow-y-auto p-4 flex flex-col space-y-1 scroll-smooth"
       >
         <div className="flex flex-col items-center mb-8">
-          <img
+          <Image
             src={conversation.avatar}
             alt={conversation.name}
+            width={96}
+            height={96}
             className="w-24 h-24 rounded-full mb-3 shadow-md"
           />
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{conversation.name}</h2>
