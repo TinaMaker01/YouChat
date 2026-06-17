@@ -1,7 +1,13 @@
-import { openDb } from '@/lib/db';
+import { getSession } from '@/lib/auth';
+import { getMessages, addMessage } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const conversationId = searchParams.get('conversationId');
 
@@ -10,11 +16,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const db = await openDb();
-    const messages = await db.all(
-      'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
-      conversationId
-    );
+    const messages = await getMessages(parseInt(conversationId), session.userId);
     return NextResponse.json(messages);
   } catch (error) {
     console.error('Failed to fetch messages:', error);
@@ -24,27 +26,17 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { conversationId, sender, text } = await request.json();
-    const db = await openDb();
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    const result = await db.run(
-      'INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)',
-      conversationId, sender, text
-    );
+    const { conversationId, text } = await request.json();
 
-    // Update last_message in conversation
-    await db.run(
-      'UPDATE conversations SET last_message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-      text, conversationId
-    );
+    // Always use 'me' as the sender for messages sent via API
+    const message = await addMessage(parseInt(conversationId), session.userId, text, 'me');
 
-    return NextResponse.json({
-      id: result.lastID,
-      conversation_id: conversationId,
-      sender,
-      text,
-      created_at: new Date().toISOString()
-    });
+    return NextResponse.json(message);
   } catch (error) {
     console.error('Failed to create message:', error);
     return NextResponse.json({ error: 'Failed to create message' }, { status: 500 });

@@ -1,10 +1,15 @@
-import { openDb } from '@/lib/db';
+import { getSession } from '@/lib/auth';
+import { getConversations } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const db = await openDb();
-    const conversations = await db.all('SELECT * FROM conversations ORDER BY updated_at DESC');
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const conversations = await getConversations(session.userId);
     return NextResponse.json(conversations);
   } catch (error) {
     console.error('Failed to fetch conversations:', error);
