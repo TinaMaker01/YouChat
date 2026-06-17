@@ -5,28 +5,10 @@
 ▲ Next.js 16.2.9 (Turbopack)
 - Local:         http://localhost:3000
 - Network:       http://192.168.0.2:3000
-✓ Ready in 596ms
+✓ Ready in 535ms
 
 ○ Compiling /login ...
- HEAD /login 200 in 5.7s (next.js: 5.0s, proxy.ts: 305ms, application-code: 447ms)
- GET /login 200 in 130ms (next.js: 8ms, proxy.ts: 9ms, application-code: 113ms)
- GET /register 200 in 2.8s (next.js: 2.6s, proxy.ts: 53ms, application-code: 135ms)
- GET /login 200 in 89ms (next.js: 6ms, proxy.ts: 9ms, application-code: 74ms)
- GET /register 200 in 57ms (next.js: 6ms, proxy.ts: 14ms, application-code: 37ms)
- POST /api/auth/register 200 in 879ms (next.js: 644ms, application-code: 235ms)
- GET / 200 in 1579ms (next.js: 1515ms, proxy.ts: 14ms, application-code: 50ms)
- GET / 200 in 117ms (next.js: 7ms, proxy.ts: 23ms, application-code: 87ms)
- GET /api/conversations 200 in 316ms (next.js: 243ms, application-code: 73ms)
- GET /api/auth/me 200 in 318ms (next.js: 299ms, application-code: 19ms)
- GET /api/conversations 200 in 22ms (next.js: 5ms, application-code: 18ms)
- GET /api/auth/me 200 in 24ms (next.js: 12ms, application-code: 12ms)
- GET /login 200 in 95ms (next.js: 7ms, proxy.ts: 9ms, application-code: 79ms)
- GET /register 200 in 77ms (next.js: 10ms, proxy.ts: 14ms, application-code: 52ms)
- POST /api/auth/register 200 in 166ms (next.js: 3ms, application-code: 163ms)
- GET / 200 in 43ms (next.js: 4ms, proxy.ts: 6ms, application-code: 32ms)
- GET / 200 in 108ms (next.js: 6ms, proxy.ts: 60ms, application-code: 43ms)
- GET /api/conversations 200 in 21ms (next.js: 7ms, application-code: 14ms)
- GET /api/auth/me 200 in 24ms (next.js: 11ms, application-code: 13ms)
- GET /api/conversations 200 in 19ms (next.js: 3ms, application-code: 15ms)
- GET /api/auth/me 200 in 15ms (next.js: 3ms, application-code: 13ms)
- HEAD /login 200 in 77ms (next.js: 6ms, proxy.ts: 4ms, application-code: 66ms)
+ GET /login 200 in 7.1s (next.js: 6.2s, proxy.ts: 282ms, application-code: 660ms)
+ GET /register 200 in 1156ms (next.js: 999ms, proxy.ts: 8ms, application-code: 149ms)
+ GET /login 200 in 82ms (next.js: 5ms, proxy.ts: 7ms, application-code: 69ms)
+ GET /register 200 in 38ms (next.js: 4ms, proxy.ts: 7ms, application-code: 27ms)
