@@ -18,6 +18,18 @@ export async function GET(request: Request) {
     }
 
     const db = await openDb();
+
+    // Verify conversation belongs to user
+    const conversation = await db.get(
+      'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
+      conversationId,
+      session.userId
+    );
+
+    if (!conversation) {
+      return NextResponse.json({ error: 'Conversation not found or access denied' }, { status: 404 });
+    }
+
     const messages = await db.all(
       'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
       conversationId
@@ -36,8 +48,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { conversationId, sender, text } = await request.json();
-    const result = await createMessage(Number(conversationId), text, sender);
+    const { conversationId, text } = await request.json();
+
+    const db = await openDb();
+    // Verify conversation belongs to user
+    const conversation = await db.get(
+      'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
+      conversationId,
+      session.userId
+    );
+
+    if (!conversation) {
+      return NextResponse.json({ error: 'Conversation not found or access denied' }, { status: 404 });
+    }
+
+    // Force sender to 'me' if it's from the client, or handle according to app logic
+    // Usually messages sent via this API are from the user
+    const actualSender = 'me';
+
+    const result = await createMessage(Number(conversationId), text, actualSender);
 
     return NextResponse.json(result);
   } catch (error) {

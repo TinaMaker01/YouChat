@@ -21,10 +21,12 @@ async function init() {
 
     CREATE TABLE IF NOT EXISTS conversations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT NOT NULL,
       name TEXT NOT NULL,
       avatar TEXT,
       last_message TEXT,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id)
     );
 
     CREATE TABLE IF NOT EXISTS messages (
@@ -38,12 +40,20 @@ async function init() {
   `);
 
   // Seed data
-  await db.run(`INSERT INTO conversations (name, avatar, last_message) VALUES (?, ?, ?)`,
-    'Alice Smith', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice', 'Hey! How are you doing?');
-  await db.run(`INSERT INTO conversations (name, avatar, last_message) VALUES (?, ?, ?)`,
-    'Bob Jones', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob', 'Did you see the latest news?');
-  await db.run(`INSERT INTO conversations (name, avatar, last_message) VALUES (?, ?, ?)`,
-    'Charlie Brown', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Charlie', 'Let\'s grab coffee later.');
+  const testUserId = 'test-user-id';
+  await db.run(
+    'INSERT INTO users (id, email, password) VALUES (?, ?, ?)',
+    testUserId,
+    'test@example.com',
+    '$2a$10$YourHashedPasswordHere' // This is just a placeholder hash for 'password'
+  );
+
+  await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
+    testUserId, 'Alice Smith', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice', 'Hey! How are you doing?');
+  await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
+    testUserId, 'Bob Jones', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob', 'Did you see the latest news?');
+  await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
+    testUserId, 'Charlie Brown', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Charlie', 'Let\'s grab coffee later.');
 
   // Alice messages
   await db.run(`INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)`, 1, 'them', 'Hi there!');
