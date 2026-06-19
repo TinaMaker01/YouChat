@@ -3,6 +3,10 @@ import { getSession } from '@/lib/auth';
 import { createMessage } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
 
+/**
+ * API route to fetch messages for a specific conversation.
+ * Requires a valid session and a conversationId query parameter.
+ */
 export async function GET(request: Request) {
   try {
     const session = await getSession();
@@ -18,6 +22,7 @@ export async function GET(request: Request) {
     }
 
     const db = await openDb();
+    // Fetch all messages for the given conversation ID
     const messages = await db.all(
       'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
       conversationId
@@ -29,6 +34,10 @@ export async function GET(request: Request) {
   }
 }
 
+/**
+ * API route to create a new message.
+ * Requires a valid session.
+ */
 export async function POST(request: Request) {
   try {
     const session = await getSession();
