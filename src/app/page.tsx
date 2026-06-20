@@ -2,6 +2,7 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { MessengerClient } from './messenger-client';
+import { getConversations } from '@/lib/messaging';
 
 export default async function MessengerPage() {
   const session = await getSession();
@@ -13,7 +14,7 @@ export default async function MessengerPage() {
   const db = await openDb();
 
   const [conversations, user] = await Promise.all([
-    db.all('SELECT * FROM conversations ORDER BY updated_at DESC'),
+    getConversations(session.userId),
     db.get('SELECT email FROM users WHERE id = ?', session.userId)
   ]);
 
