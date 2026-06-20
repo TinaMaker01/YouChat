@@ -1,6 +1,5 @@
-import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
-import { createMessage } from '@/lib/messaging';
+import { createMessage, getMessages } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -17,14 +16,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'conversationId is required' }, { status: 400 });
     }
 
-    const db = await openDb();
-    const messages = await db.all(
-      'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
-      conversationId
-    );
+    const messages = await getMessages(Number(conversationId), session.userId);
     return NextResponse.json(messages);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Failed to fetch messages:', error);
+    if (error instanceof Error && error.message === 'Unauthorized or conversation not found') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    }
     return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
   }
 }
@@ -36,12 +34,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { conversationId, sender, text } = await request.json();
-    const result = await createMessage(Number(conversationId), text, sender);
+    const { conversationId, text } = await request.json();
+
+    // Ensure the user can only send messages as 'me' via the API
+    const result = await createMessage(Number(conversationId), text, 'me', session.userId);
 
     return NextResponse.json(result);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Failed to create message:', error);
+    if (error instanceof Error && error.message === 'Unauthorized or conversation not found') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+    }
     return NextResponse.json({ error: 'Failed to create message' }, { status: 500 });
   }
 }
