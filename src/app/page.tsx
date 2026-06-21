@@ -1,5 +1,6 @@
 import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
+import { getConversations } from '@/lib/messaging';
 import { redirect } from 'next/navigation';
 import { MessengerClient } from './messenger-client';
 
@@ -13,11 +14,12 @@ export default async function MessengerPage() {
   const db = await openDb();
 
   const [conversations, user] = await Promise.all([
-    db.all('SELECT * FROM conversations ORDER BY updated_at DESC'),
+    getConversations(session.userId),
     db.get('SELECT email FROM users WHERE id = ?', session.userId)
   ]);
 
   if (!user) {
+    // User in session not found in DB
     redirect('/login');
   }
 
