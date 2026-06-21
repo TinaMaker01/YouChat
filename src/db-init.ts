@@ -1,4 +1,5 @@
 import { openDb } from './lib/db';
+import { hashPassword } from './lib/auth';
 
 async function init() {
   const db = await openDb();
@@ -21,10 +22,12 @@ async function init() {
 
     CREATE TABLE IF NOT EXISTS conversations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT NOT NULL,
       name TEXT NOT NULL,
       avatar TEXT,
       last_message TEXT,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id)
     );
 
     CREATE TABLE IF NOT EXISTS messages (
@@ -37,13 +40,19 @@ async function init() {
     );
   `);
 
+  // Create a default user
+  const defaultUserId = 'user_123';
+  const hashedPw = await hashPassword('password123');
+  await db.run(`INSERT INTO users (id, email, password) VALUES (?, ?, ?)`,
+    defaultUserId, 'test@example.com', hashedPw);
+
   // Seed data
-  await db.run(`INSERT INTO conversations (name, avatar, last_message) VALUES (?, ?, ?)`,
-    'Alice Smith', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice', 'Hey! How are you doing?');
-  await db.run(`INSERT INTO conversations (name, avatar, last_message) VALUES (?, ?, ?)`,
-    'Bob Jones', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob', 'Did you see the latest news?');
-  await db.run(`INSERT INTO conversations (name, avatar, last_message) VALUES (?, ?, ?)`,
-    'Charlie Brown', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Charlie', 'Let\'s grab coffee later.');
+  await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
+    defaultUserId, 'Alice Smith', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice', 'Hey! How are you doing?');
+  await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
+    defaultUserId, 'Bob Jones', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob', 'Did you see the latest news?');
+  await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
+    defaultUserId, 'Charlie Brown', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Charlie', 'Let\'s grab coffee later.');
 
   // Alice messages
   await db.run(`INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)`, 1, 'them', 'Hi there!');
@@ -57,7 +66,7 @@ async function init() {
   await db.run(`INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)`, 3, 'me', 'Hey Charlie');
   await db.run(`INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)`, 3, 'them', 'Let\'s grab coffee later.');
 
-  console.log('Database initialized with Auth and Messenger schema.');
+  console.log('Database initialized with Auth and Messenger schema (Multi-user ready).');
 }
 
 init().catch(console.error);
