@@ -1,11 +1,17 @@
 'use server';
 
 import { createMessage } from '@/lib/messaging';
+import { getSession } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
 export async function sendMessage(conversationId: number, text: string) {
   try {
-    const result = await createMessage(conversationId, text, 'me');
+    const session = await getSession();
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+
+    const result = await createMessage(conversationId, text, 'me', session.userId);
 
     revalidatePath('/');
 
