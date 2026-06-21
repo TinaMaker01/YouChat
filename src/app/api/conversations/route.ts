@@ -10,7 +10,10 @@ export async function GET() {
     }
 
     const db = await openDb();
-    const conversations = await db.all('SELECT * FROM conversations ORDER BY updated_at DESC');
+    const conversations = await db.all(
+      'SELECT * FROM conversations WHERE user_id = ? ORDER BY updated_at DESC',
+      session.userId
+    );
     return NextResponse.json(conversations);
   } catch (error) {
     console.error('Failed to fetch conversations:', error);
