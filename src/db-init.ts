@@ -1,9 +1,14 @@
 import { openDb } from './lib/db';
 
+/**
+ * Initializes the SQLite database schema and seeds it with initial data.
+ * This script is intended to be run manually via `npx tsx src/db-init.ts`.
+ */
 async function init() {
   const db = await openDb();
 
-  // Drop old tables to start fresh
+  console.log('Dropping existing tables...');
+  // Drop old tables to start fresh during development
   await db.exec(`
     DROP TABLE IF EXISTS posts;
     DROP TABLE IF EXISTS messages;
@@ -11,6 +16,7 @@ async function init() {
     DROP TABLE IF EXISTS users;
   `);
 
+  console.log('Creating tables...');
   await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,

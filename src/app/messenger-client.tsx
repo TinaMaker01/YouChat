@@ -30,13 +30,17 @@ interface MessengerClientProps {
   initialUser: User;
 }
 
+/**
+ * Main client component for the Messenger interface.
+ * Handles conversation state, message fetching, polling, and optimistic updates.
+ */
 export function MessengerClient({ initialConversations, initialUser }: MessengerClientProps) {
   const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
   const [activeId, setActiveId] = useState<number | null>(initialConversations[0]?.id || null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState<User>(initialUser);
 
-  // Fetch messages when activeId changes
+  // Fetch messages when activeId changes and set up polling
   useEffect(() => {
     if (activeId) {
       async function fetchMessages() {
@@ -50,33 +54,44 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
       }
       fetchMessages();
 
-      // Poll for new messages every 3 seconds (lightweight "real-time")
+      /**
+       * Poll for new messages every 3 seconds to provide a "real-time" feel
+       * without the complexity of WebSockets.
+       */
       const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
   }, [activeId]);
 
+  /**
+   * Handles sending a new message.
+   * Implements optimistic updates for a snappier UI experience.
+   */
   const handleSendMessage = async (text: string) => {
     if (!activeId) return;
 
-    // Optimistic update
+    // 1. Create a temporary optimistic message
     const newMessage: Message = {
-      id: Math.floor(Math.random() * 1000000000), // Temporary numeric ID for optimistic update
+      id: Math.floor(Math.random() * 1000000000), // Temporary numeric ID
       sender: 'me',
       text,
       created_at: new Date().toISOString()
     };
+
+    // 2. Update UI immediately
     setMessages(prev => [...prev, newMessage]);
 
     try {
+      // 3. Perform the actual server action
       await sendMessage(activeId, text);
-      // Update conversations list with last message
+
+      // 4. Update conversations list with the new last message
       setConversations(prev => prev.map(c =>
         c.id === activeId ? { ...c, last_message: text } : c
       ));
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Remove the optimistic message on error
+      // 5. Rollback: Remove the optimistic message on error
       setMessages(prev => prev.filter(m => m.id !== newMessage.id));
     }
   };
