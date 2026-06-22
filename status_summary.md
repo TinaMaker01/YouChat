@@ -9,11 +9,11 @@
 - **Architectural Debt**: The application relies on 3-second polling for "real-time" updates, which is inefficient and scales poorly.
 
 ## 3. Today's Priorities
-1. **Verify Security**: Ensure the recently implemented data isolation and API security are robust.
-2. **Enhance Chatbot**: Consider moving from mock responses to actual OpenAI API integration.
+1. **Verify Security**: (COMPLETED) Audited and hardened Server Actions for conversation ownership.
+2. **Enhance Chatbot**: (COMPLETED) Upgraded mock responses with randomized delays and variety.
 
 ## 4. Items Requiring Immediate Attention
-- **Testing**: Add unit and integration tests for the new messaging logic and data isolation.
+- **Testing**: (COMPLETED) Established Vitest framework and initial messaging tests.
 
 ## 5. Prioritized Action List
 1.  **Polling Replacement**: Evaluate and implement a real-time solution (e.g., WebSockets) to replace the current polling mechanism.
