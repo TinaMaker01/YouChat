@@ -50,7 +50,7 @@ A modern, real-time Messenger-like chat application built with **Next.js 16 (App
 4.  **Initialize the database:**
     This will create the SQLite database and seed it with initial data.
     ```bash
-    npx tsx src/db-init.ts
+    npm run db:init
     ```
 
 ### Development
