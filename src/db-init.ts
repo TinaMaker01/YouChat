@@ -3,6 +3,12 @@ import { openDb } from './lib/db';
 /**
  * Initializes the SQLite database schema and seeds it with initial data.
  * This script is intended to be run manually via `npx tsx src/db-init.ts`.
+ *
+ * It performs the following steps:
+ * 1. Opens a connection to the database.
+ * 2. Drops existing tables (users, conversations, messages) to ensure a clean state.
+ * 3. Creates the database schema with appropriate constraints and foreign keys.
+ * 4. Seeds the database with a default test user and several conversations/messages.
  */
 async function init() {
   const db = await openDb();

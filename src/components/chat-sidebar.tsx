@@ -18,6 +18,17 @@ interface ChatSidebarProps {
   onSelectConversation: (id: number) => void;
 }
 
+/**
+ * ChatSidebar component displaying a list of conversations.
+ *
+ * Includes a search bar (placeholder) and a scrollable list of conversation previews.
+ * Each preview shows the user's avatar, name, and the last message sent.
+ *
+ * @param props - Component properties.
+ * @param props.conversations - Array of conversation objects to display.
+ * @param props.activeConversationId - ID of the currently selected conversation.
+ * @param props.onSelectConversation - Callback triggered when a conversation is clicked.
+ */
 export function ChatSidebar({ conversations, activeConversationId, onSelectConversation }: ChatSidebarProps) {
   return (
     <div className="w-full md:w-80 flex flex-col border-r border-gray-200 dark:border-gray-800 h-full bg-white dark:bg-black overflow-hidden">

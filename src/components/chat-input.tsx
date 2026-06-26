@@ -7,6 +7,17 @@ interface ChatInputProps {
   onSendMessage: (text: string) => void;
 }
 
+/**
+ * ChatInput component providing a text input field for sending messages.
+ *
+ * Features:
+ * - Controlled input state for the message text.
+ * - Submit handler that prevents default form behavior and calls `onSendMessage`.
+ * - Placeholder buttons for adding attachments and emojis.
+ *
+ * @param props - Component properties.
+ * @param props.onSendMessage - Callback triggered when the user submits a message.
+ */
 export function ChatInput({ onSendMessage }: ChatInputProps) {
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);

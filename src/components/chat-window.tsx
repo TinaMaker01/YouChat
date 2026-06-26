@@ -25,6 +25,17 @@ interface ChatWindowProps {
   onSendMessage: (text: string) => void;
 }
 
+/**
+ * ChatWindow component displaying the current conversation.
+ *
+ * Includes the header with conversation details, the message history area
+ * that auto-scrolls to the bottom, and the message input field.
+ *
+ * @param props - Component properties.
+ * @param props.conversation - The currently selected conversation object, or null if none.
+ * @param props.messages - Array of message objects for the active conversation.
+ * @param props.onSendMessage - Callback triggered when a new message is sent.
+ */
 export function ChatWindow({ conversation, messages, onSendMessage }: ChatWindowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 

@@ -2,6 +2,12 @@
 
 import { motion } from 'framer-motion';
 
+/**
+ * LoadingSpinner component displaying a complex animated loader.
+ *
+ * Uses multiple concentric circles with different animations (scaling, rotating, pulsing)
+ * created with Framer Motion.
+ */
 export function LoadingSpinner() {
   return (
     <div className="flex items-center justify-center">
