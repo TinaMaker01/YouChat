@@ -33,17 +33,23 @@ export async function createMessage(conversationId: number, text: string, sender
   if (sender === 'me') {
     // In a real app, this might be a background job or an async process
     // For this implementation, we'll simulate a response
+    const delay = Math.floor(Math.random() * 2000) + 500; // Randomized delay between 500ms and 2500ms
     setTimeout(async () => {
       const responses = [
         "That's interesting! Tell me more.",
         "I see. What do you think about that?",
         "Got it. Is there anything else?",
         "That makes sense. How can I help further?",
-        "I'm a chatbot, and I'm here to assist you!"
+        "I'm a chatbot, and I'm here to assist you!",
+        "Can you elaborate on that?",
+        "I'm not sure I understand, but I'm listening.",
+        "That's a great point!",
+        "How does that make you feel?",
+        "Interesting perspective. Anything else on your mind?"
       ];
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
       await createMessage(conversationId, randomResponse, 'them');
-    }, 1000);
+    }, delay);
   }
 
   return newMessage;
