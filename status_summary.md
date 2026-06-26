@@ -1,22 +1,24 @@
 # Project Status Summary - Messenger App
 
 ## 1. Ongoing Tasks
-- **Messenger Implementation**: The core messaging UI and basic database persistence are functional.
-- **Authentication**: Custom JWT-based authentication is implemented for login, registration, and logout.
-- **Real-time Upgrade**: Evaluating replacement of polling with WebSockets for true real-time interaction.
+- **Real-time Replacement**: Evaluating and planning the replacement of 3-second polling with a WebSocket-based solution (Socket.io or similar).
+- **Testing Implementation**: Setting up a testing framework (Vitest) to ensure long-term stability and prevent regressions.
+- **AI Enhancement**: Preparing for the transition from a mock chatbot to a full OpenAI API integration.
 
 ## 2. Blocking Issues
-- **Architectural Debt**: The application relies on 3-second polling for "real-time" updates, which is inefficient and scales poorly.
+- **Architectural Debt**: High priority is placed on replacing the current polling mechanism as it is the primary bottleneck for scalability.
 
 ## 3. Today's Priorities
-1. **Verify Security**: Ensure the recently implemented data isolation and API security are robust.
-2. **Enhance Chatbot**: Consider moving from mock responses to actual OpenAI API integration.
+1. **WebSocket Research**: Identify the most compatible WebSocket strategy for Next.js 16 (App Router).
+2. **Testing Infrastructure**: Initialize Vitest and write basic tests for core utility functions.
 
 ## 4. Items Requiring Immediate Attention
-- **Testing**: Add unit and integration tests for the new messaging logic and data isolation.
+- **WebSockets**: This is the most critical technical debt item currently affecting the application's architecture.
+- **Testing**: Establishing a test suite is necessary before any major architectural changes (like WebSockets) are implemented.
 
 ## 5. Prioritized Action List
-1.  **Polling Replacement**: Evaluate and implement a real-time solution (e.g., WebSockets) to replace the current polling mechanism.
-2.  **OpenAI Integration**: Upgrade the mock chatbot to use the OpenAI API.
-3.  **Testing Suite**: Implement Jest or Vitest for unit testing core logic.
-4.  **Cleanup**: Remove any remaining unused components and address minor linting warnings.
+1.  **WebSocket Integration**: Replace the polling mechanism with a real-time solution.
+2.  **Testing Suite**: Implement Vitest for unit testing core logic.
+3.  **OpenAI Integration**: Upgrade the mock chatbot to use the OpenAI API once configured.
+4.  **Security Hardening**: Implement rate limiting on sensitive routes.
+5.  **Cleanup**: Resolve any remaining minor linting warnings and remove unused components.
