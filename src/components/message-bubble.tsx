@@ -14,6 +14,16 @@ interface MessageBubbleProps {
   message: Message;
 }
 
+/**
+ * MessageBubble component for displaying an individual chat message.
+ *
+ * Styles the message differently based on whether it was sent by the current user
+ * ('me') or another participant ('them').
+ * Uses Framer Motion for a subtle entry animation.
+ *
+ * @param props - Component properties.
+ * @param props.message - The message object containing sender and text.
+ */
 export function MessageBubble({ message }: MessageBubbleProps) {
   const isMe = message.sender === 'me';
 

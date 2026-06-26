@@ -2,6 +2,14 @@ import { openDb } from '@/lib/db';
 import { verifyPassword, createSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 
+/**
+ * API route for user login.
+ *
+ * Verifies user credentials against the database and creates a session cookie if successful.
+ *
+ * @param request - The incoming Request object containing email and password in JSON body.
+ * @returns A NextResponse object indicating success or failure with appropriate status codes.
+ */
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();

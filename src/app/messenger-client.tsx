@@ -40,7 +40,14 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState<User>(initialUser);
 
-  // Fetch messages when activeId changes and set up polling
+  /**
+   * Effect to manage message fetching and polling.
+   *
+   * When the active conversation changes:
+   * 1. Fetches the initial set of messages for that conversation.
+   * 2. Sets up a 3-second interval to poll for new messages.
+   * 3. Cleans up the interval when the component unmounts or activeId changes.
+   */
   useEffect(() => {
     if (activeId) {
       async function fetchMessages() {
@@ -54,18 +61,23 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
       }
       fetchMessages();
 
-      /**
-       * Poll for new messages every 3 seconds to provide a "real-time" feel
-       * without the complexity of WebSockets.
-       */
       const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
   }, [activeId]);
 
   /**
-   * Handles sending a new message.
-   * Implements optimistic updates for a snappier UI experience.
+   * Handles sending a new message with optimistic UI updates.
+   *
+   * Flow:
+   * 1. Generates a temporary "optimistic" message object.
+   * 2. Immediately updates the local `messages` state to show the message in the UI.
+   * 3. Calls the `sendMessage` Server Action to persist the message in the database.
+   * 4. Updates the `conversations` list to reflect the new last message for the active chat.
+   * 5. If the server request fails, it catches the error and removes the optimistic message
+   *    from the UI (rollback) to maintain data consistency.
+   *
+   * @param text - The content of the message to be sent.
    */
   const handleSendMessage = async (text: string) => {
     if (!activeId) return;
@@ -78,7 +90,7 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
       created_at: new Date().toISOString()
     };
 
-    // 2. Update UI immediately
+    // 2. Update UI immediately (Optimistic Update)
     setMessages(prev => [...prev, newMessage]);
 
     try {

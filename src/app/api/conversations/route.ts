@@ -2,6 +2,11 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 
+/**
+ * API route to fetch all conversations for the currently logged-in user.
+ *
+ * @returns A NextResponse object containing an array of conversation objects.
+ */
 export async function GET() {
   try {
     const session = await getSession();

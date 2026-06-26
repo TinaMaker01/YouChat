@@ -10,8 +10,15 @@ const JWT_SECRET = new TextEncoder().encode(secret || 'dev-secret-at-least-32-ch
 
 /**
  * Custom middleware (renamed to proxy.ts in Next.js 16) for route protection and session verification.
+ *
+ * Logic:
+ * - Checks for a 'session' cookie containing a JWT.
+ * - Protects the root path ('/') and any path starting with '/dashboard', redirecting to '/login' if no valid session exists.
+ * - Redirects logged-in users away from '/login' and '/register' back to the home page.
+ * - Allows all other requests to proceed (e.g., static assets, API routes which handle their own auth).
+ *
  * @param request - The incoming Next.js request object.
- * @returns A NextResponse object that either redirects the user or continues the request.
+ * @returns A NextResponse object that either redirects the user or continues the request via NextResponse.next().
  */
 export async function proxy(request: NextRequest) {
   const session = request.cookies.get('session')?.value;
