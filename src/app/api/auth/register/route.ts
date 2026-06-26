@@ -2,6 +2,12 @@ import { openDb } from '@/lib/db';
 import { hashPassword, createSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { z } from 'zod';
+
+const registerSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+});
 
 /**
  * API route for user registration.
@@ -9,18 +15,14 @@ import crypto from 'crypto';
  */
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const body = await request.json();
+    const result = registerSchema.safeParse(body);
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 });
     }
 
-    // Password length validation
-    if (!password || password.length < 8) {
-      return NextResponse.json({ error: 'Password must be at least 8 characters long' }, { status: 400 });
-    }
+    const { email, password } = result.data;
 
     const db = await openDb();
 

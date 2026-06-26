@@ -2,6 +2,20 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { createMessage } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const getMessagesSchema = z.object({
+  conversationId: z.string().transform((val) => Number(val)).refine((val) => !isNaN(val), {
+    message: "conversationId must be a valid number",
+  }),
+});
+
+const createMessageSchema = z.object({
+  conversationId: z.union([z.number(), z.string().transform((val) => Number(val))]).refine((val) => !isNaN(Number(val)), {
+    message: "conversationId must be a valid number",
+  }),
+  text: z.string().min(1, "Message text cannot be empty").max(2000, "Message is too long"),
+});
 
 /**
  * API route to fetch messages for a specific conversation.
@@ -15,11 +29,15 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const conversationId = searchParams.get('conversationId');
+    const result = getMessagesSchema.safeParse({
+      conversationId: searchParams.get('conversationId'),
+    });
 
-    if (!conversationId) {
-      return NextResponse.json({ error: 'conversationId is required' }, { status: 400 });
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 });
     }
+
+    const { conversationId } = result.data;
 
     const db = await openDb();
 
@@ -56,13 +74,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { conversationId, text } = await request.json();
+    const body = await request.json();
+    const validationResult = createMessageSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 });
+    }
+
+    const { conversationId, text } = validationResult.data;
 
     const db = await openDb();
     // Verify conversation belongs to user
     const conversation = await db.get(
       'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
-      conversationId,
+      Number(conversationId),
       session.userId
     );
 
