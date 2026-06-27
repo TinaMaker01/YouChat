@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     // Usually messages sent via this API are from the user
     const actualSender = 'me';
 
-    const result = await createMessage(Number(conversationId), text, actualSender);
+    const result = await createMessage(Number(conversationId), text, actualSender, session.userId);
 
     return NextResponse.json(result);
   } catch (error) {
