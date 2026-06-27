@@ -10,7 +10,6 @@ async function init() {
   console.log('Dropping existing tables...');
   // Drop old tables to start fresh during development
   await db.exec(`
-    DROP TABLE IF EXISTS posts;
     DROP TABLE IF EXISTS messages;
     DROP TABLE IF EXISTS conversations;
     DROP TABLE IF EXISTS users;

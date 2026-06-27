@@ -8,13 +8,13 @@ The project has successfully established a foundation for a real-time messaging 
 - **Messenger UI**: Developed a modern, responsive two-column layout featuring a conversation sidebar and a message window with smooth transitions.
 - **Database Integration**: Set up SQLite with tables for users, conversations, and messages, including seeding scripts for development.
 - **Message Polling**: Implemented a 3-second client-side polling mechanism to provide a near-real-time experience.
-- **Server Component Refactor**: Initial steps taken to move data fetching from the client to the server (e.g., `src/app/page.tsx`).
+- **Server Component Refactor**: Moved data fetching from the client to the server (e.g., `src/app/page.tsx`).
+- **Data Isolation & Security Hardening**: Enforced conversation ownership in all messaging logic and API routes.
+- **Unit Testing Suite**: Established a Vitest-based testing suite for core business logic.
 
 ## 3. Overdue Tasks
-- **Data Isolation Implementation**: The database schema currently lacks a `user_id` in the `conversations` table, preventing true multi-user isolation.
-- **OpenAI/Chatbot Integration**: Automated chatbot responses, as outlined in the initial blueprint, have not yet been integrated into the messaging flow.
-- **API Security Hardening**: While initial checks are in place, comprehensive session verification and data filtering are needed for all protected endpoints.
-- **Branch Consolidation**: Logic from the `messenger-improvements` branch needs to be fully integrated into the main codebase.
+- **OpenAI Integration**: Automated chatbot responses via the OpenAI API have not yet been integrated.
+- **WebSocket Upgrade**: True real-time messaging is pending the replacement of the polling mechanism.
 
 ## 4. Identified Risks
 - **Security Vulnerability**: API endpoints could potentially leak data if not strictly scoped to the authenticated user's ID.

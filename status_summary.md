@@ -9,14 +9,14 @@
 - **Architectural Debt**: The application relies on 3-second polling for "real-time" updates, which is inefficient and scales poorly.
 
 ## 3. Today's Priorities
-1. **Verify Security**: Ensure the recently implemented data isolation and API security are robust.
-2. **Enhance Chatbot**: Consider moving from mock responses to actual OpenAI API integration.
+1. **Real-time Upgrade**: Implement WebSockets to replace the 3-second polling mechanism.
+2. **OpenAI Integration**: Transition from mock chatbot responses to actual OpenAI API integration.
 
 ## 4. Items Requiring Immediate Attention
-- **Testing**: Add unit and integration tests for the new messaging logic and data isolation.
+- **Performance**: Optimize the database queries and potentially implement caching for frequently accessed data.
 
 ## 5. Prioritized Action List
-1.  **Polling Replacement**: Evaluate and implement a real-time solution (e.g., WebSockets) to replace the current polling mechanism.
+1.  **Polling Replacement**: Implement a real-time solution (e.g., Socket.io or Pusher) to replace the current polling mechanism.
 2.  **OpenAI Integration**: Upgrade the mock chatbot to use the OpenAI API.
-3.  **Testing Suite**: Implement Jest or Vitest for unit testing core logic.
-4.  **Cleanup**: Remove any remaining unused components and address minor linting warnings.
+3.  **API Rate Limiting**: Implement rate limiting on authentication and messaging endpoints to prevent abuse.
+4.  **UI/UX Refinement**: Improve mobile responsiveness and polish the message bubble animations.

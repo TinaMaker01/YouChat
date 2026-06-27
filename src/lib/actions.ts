@@ -2,6 +2,7 @@
 
 import { createMessage } from '@/lib/messaging';
 import { revalidatePath } from 'next/cache';
+import { getSession } from '@/lib/auth';
 
 /**
  * Server action to send a message.
@@ -13,7 +14,12 @@ import { revalidatePath } from 'next/cache';
  */
 export async function sendMessage(conversationId: number, text: string) {
   try {
-    const result = await createMessage(conversationId, text, 'me');
+    const session = await getSession();
+    if (!session) {
+      throw new Error('Unauthorized');
+    }
+
+    const result = await createMessage(conversationId, text, 'me', session.userId);
 
     // Revalidate the home page to update the conversation list (last message, etc.)
     revalidatePath('/');
