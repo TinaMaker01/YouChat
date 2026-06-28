@@ -2,6 +2,8 @@ import { openDb } from '@/lib/db';
 import { hashPassword, createSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { registerSchema } from '@/lib/validation';
+import { ZodError } from 'zod';
 
 /**
  * API route for user registration.
@@ -9,18 +11,8 @@ import crypto from 'crypto';
  */
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
-    }
-
-    // Password length validation
-    if (!password || password.length < 8) {
-      return NextResponse.json({ error: 'Password must be at least 8 characters long' }, { status: 400 });
-    }
+    const body = await request.json();
+    const { email, password } = registerSchema.parse(body);
 
     const db = await openDb();
 
@@ -47,6 +39,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
+    }
     console.error('Registration error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

@@ -42,19 +42,24 @@
 - [x] Real-time message polling.
 - [x] Database persistence for users, conversations, and messages.
 
-## 5. Major Improvements to Plan
+## 5. Actions Taken (High-Value Improvements)
 
-1. **Merge/Implement Improvements from `messenger-improvements` branch:**
-   - Shift to Server-Side Rendering (SSR) for initial data.
-   - Centralize database logic in `lib/messaging.ts`.
-2. **OpenAI Integration:** Implement the chatbot response logic as originally planned in `blueprint.md`.
-3. **Real-time Updates:** Replace 3-second polling with WebSockets (e.g., Socket.io or Pusher) for a better user experience.
-4. **Enhanced Security:**
-   - Implement rate limiting on auth routes.
-   - Add input validation (Zod).
-5. **Code Quality:**
-   - Address remaining linting warnings.
-   - Add unit and integration tests.
-6. **UI/UX Polishing:**
-   - Replace standard `<img>` tags with `next/image` for optimization.
-   - Improve mobile responsiveness.
+### Security
+- **Input Validation:** Implemented `zod` for request body validation in all auth and messaging API routes. Centralized schemas in `src/lib/validation.ts`.
+- **Data Isolation (IDOR Prevention):** Hardened `createMessage` and the `sendMessage` Server Action to verify conversation ownership. Users can no longer send or read messages in conversations they do not own.
+- **Session Verification:** Enhanced Server Actions to strictly verify sessions via `getSession()`.
+
+### Code Quality & Architecture
+- **Standardized Error Handling:** Ensured all API routes return consistent `{ error: string }` JSON responses for error cases.
+- **Improved Messaging Logic:** Refactored `src/lib/messaging.ts` to support defense-in-depth ownership checks.
+
+### Testing
+- **Test Suite Implementation:** Introduced Vitest and JSDOM.
+- **Unit Tests:** Added comprehensive tests for `src/lib/auth.ts` (password hashing) and `src/lib/messaging.ts` (message creation, data isolation, and update logic).
+
+## 6. Future Recommendations
+
+1. **OpenAI Integration:** Transition from mock responses to actual OpenAI API integration.
+2. **Real-time Updates:** Replace 3-second polling with WebSockets (e.g., Socket.io or Pusher).
+3. **Rate Limiting:** Implement rate limiting on `/api/auth/login` and `/api/auth/register` to prevent brute-force attacks.
+4. **Mobile Responsiveness:** Further refine the UI for smaller screens.
