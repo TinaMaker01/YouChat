@@ -5,10 +5,22 @@ import { openDb } from './db';
  * @param conversationId - The ID of the conversation.
  * @param text - The content of the message.
  * @param sender - The sender of the message ('me' or 'them').
+ * @param userId - Optional user ID to verify ownership (defense in depth).
  * @returns A promise that resolves to the newly created message object.
  */
-export async function createMessage(conversationId: number, text: string, sender: 'me' | 'them') {
+export async function createMessage(conversationId: number, text: string, sender: 'me' | 'them', userId?: string) {
   const db = await openDb();
+
+  if (userId) {
+    const conversation = await db.get(
+      'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
+      conversationId,
+      userId
+    );
+    if (!conversation) {
+      throw new Error('Unauthorized: Conversation does not belong to user');
+    }
+  }
 
   const result = await db.run(
     'INSERT INTO messages (conversation_id, sender, text) VALUES (?, ?, ?)',
