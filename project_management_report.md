@@ -9,10 +9,10 @@ The project has successfully established a foundation for a real-time messaging 
 - **Database Integration**: Set up SQLite with tables for users, conversations, and messages, including seeding scripts for development.
 - **Message Polling**: Implemented a 3-second client-side polling mechanism to provide a near-real-time experience.
 - **Server Component Refactor**: Initial steps taken to move data fetching from the client to the server (e.g., `src/app/page.tsx`).
+- **Data Isolation**: Implemented `user_id` in the `conversations` table and secured API routes to enforce multi-user isolation.
 
 ## 3. Overdue Tasks
-- **Data Isolation Implementation**: The database schema currently lacks a `user_id` in the `conversations` table, preventing true multi-user isolation.
-- **OpenAI/Chatbot Integration**: Automated chatbot responses, as outlined in the initial blueprint, have not yet been integrated into the messaging flow.
+- **OpenAI/Chatbot Integration**: Automated chatbot responses, as outlined in the initial blueprint, have not yet been integrated into the messaging flow (currently using a mock).
 - **API Security Hardening**: While initial checks are in place, comprehensive session verification and data filtering are needed for all protected endpoints.
 - **Branch Consolidation**: Logic from the `messenger-improvements` branch needs to be fully integrated into the main codebase.
 
@@ -22,7 +22,6 @@ The project has successfully established a foundation for a real-time messaging 
 - **Data Integrity**: The lack of foreign key constraints or user-scoped queries in some areas poses a risk to data privacy between different users.
 
 ## 5. Blockages
-- **Schema Limitation**: The absence of a `user_id` field in the `conversations` table is a major architectural blockage for supporting multiple users with private conversations.
 - **Environment Configuration**: Lack of a configured `OPENAI_API_KEY` prevents the implementation of the chatbot features.
 
 ## 6. Recommendations for the Following Week
