@@ -2,6 +2,8 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { createMessage } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
+import { sendMessageSchema } from '@/lib/validations';
+import { ZodError } from 'zod';
 
 /**
  * API route to fetch messages for a specific conversation.
@@ -56,7 +58,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { conversationId, text } = await request.json();
+    const body = await request.json();
+    const { conversationId, text } = sendMessageSchema.parse(body);
 
     const db = await openDb();
     // Verify conversation belongs to user
@@ -78,6 +81,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
+    }
     console.error('Failed to create message:', error);
     return NextResponse.json({ error: 'Failed to create message' }, { status: 500 });
   }
