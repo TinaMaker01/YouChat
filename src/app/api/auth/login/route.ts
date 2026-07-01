@@ -1,14 +1,13 @@
 import { openDb } from '@/lib/db';
 import { verifyPassword, createSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
+import { loginSchema } from '@/lib/validations';
+import { ZodError } from 'zod';
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
-
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400 });
-    }
+    const body = await request.json();
+    const { email, password } = loginSchema.parse(body);
 
     const db = await openDb();
     const user = await db.get('SELECT * FROM users WHERE email = ?', email);
@@ -27,6 +26,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
+    }
     console.error('Login error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
