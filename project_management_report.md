@@ -1,33 +1,27 @@
 # Project Management Report - Messenger App
 
 ## 1. Progress Summary
-The project has successfully established a foundation for a real-time messaging application. Core features such as user authentication (JWT-based), a responsive Messenger UI, and basic database persistence using SQLite are fully functional. Current efforts are focused on shifting data fetching to the server-side to leverage Next.js 16 features and addressing critical security and architectural debt.
+The project has successfully established a foundation for a real-time messaging application. Recent updates have focused on security hardening and establishing a testing framework. Core features such as user authentication, Messenger UI, and database persistence are fully functional. The architectural transition to WebSockets is now the top priority.
 
 ## 2. Completed Tasks
-- **Authentication System**: Implemented secure Login, Registration, and Logout flows using custom JWT sessions and `bcryptjs` for password hashing.
-- **Messenger UI**: Developed a modern, responsive two-column layout featuring a conversation sidebar and a message window with smooth transitions.
-- **Database Integration**: Set up SQLite with tables for users, conversations, and messages, including seeding scripts for development.
-- **Message Polling**: Implemented a 3-second client-side polling mechanism to provide a near-real-time experience.
-- **Server Component Refactor**: Initial steps taken to move data fetching from the client to the server (e.g., `src/app/page.tsx`).
+- **Authentication System**: COMPLETED. Secure Login, Registration, and Logout using JWT and bcryptjs.
+- **Data Isolation**: COMPLETED. Conversations are now correctly scoped to the authenticated user's ID.
+- **Server Action Hardening**: COMPLETED. Added session validation and ownership checks to the `sendMessage` action.
+- **Testing Infrastructure**: COMPLETED. Initialized Vitest and added a smoke test runner.
 
 ## 3. Overdue Tasks
-- **Data Isolation Implementation**: The database schema currently lacks a `user_id` in the `conversations` table, preventing true multi-user isolation.
-- **OpenAI/Chatbot Integration**: Automated chatbot responses, as outlined in the initial blueprint, have not yet been integrated into the messaging flow.
-- **API Security Hardening**: While initial checks are in place, comprehensive session verification and data filtering are needed for all protected endpoints.
-- **Branch Consolidation**: Logic from the `messenger-improvements` branch needs to be fully integrated into the main codebase.
+- **WebSocket Migration**: Replacing 3-second polling with true real-time communication.
+- **OpenAI/Chatbot Integration**: Full integration of AI responses is pending API key availability.
+- **Image Optimization**: Migration from `<img>` to `next/image` is still pending.
 
 ## 4. Identified Risks
-- **Security Vulnerability**: API endpoints could potentially leak data if not strictly scoped to the authenticated user's ID.
-- **Scalability Issues**: The reliance on 3-second polling is inefficient and will lead to performance degradation as the user base grows.
-- **Data Integrity**: The lack of foreign key constraints or user-scoped queries in some areas poses a risk to data privacy between different users.
+- **Security Scoping**: Continued monitoring of new API routes is necessary to prevent data leaks.
+- **Scalability**: The polling mechanism must be replaced before any significant increase in concurrent users.
 
 ## 5. Blockages
-- **Schema Limitation**: The absence of a `user_id` field in the `conversations` table is a major architectural blockage for supporting multiple users with private conversations.
-- **Environment Configuration**: Lack of a configured `OPENAI_API_KEY` prevents the implementation of the chatbot features.
+- **Environment Configuration**: Lack of `OPENAI_API_KEY` prevents implementation of AI-driven features.
 
 ## 6. Recommendations for the Following Week
-- **Database Migration**: Update the SQLite schema to include `user_id` in the `conversations` table and update the initialization script.
-- **WebSocket Integration**: Replace the current polling mechanism with a real-time solution like Socket.io to improve performance and user experience.
-- **Endpoint Protection**: Audit and refactor all API routes in `src/app/api/` to ensure they strictly enforce session validation and return user-specific data.
-- **Bot Implementation**: Integrate a mock chatbot response logic as a fallback before implementing the full OpenAI integration.
-- **Code Cleanup**: Remove deprecated components (e.g., `animated-post-form.tsx`) and resolve all remaining ESLint warnings.
+1. **Prioritize Pusher/Socket.io**: Immediate implementation of a real-time solution to eliminate polling.
+2. **Expand Automated Testing**: Use the newly established Vitest setup to cover all critical path logic.
+3. **Audit Remaining API Routes**: Ensure all GET/POST endpoints in `src/app/api/` follow the same security patterns as the `sendMessage` action.
