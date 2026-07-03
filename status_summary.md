@@ -1,22 +1,24 @@
 # Project Status Summary - Messenger App
 
 ## 1. Ongoing Tasks
-- **Messenger Implementation**: The core messaging UI and basic database persistence are functional.
-- **Authentication**: Custom JWT-based authentication is implemented for login, registration, and logout.
-- **Real-time Upgrade**: Evaluating replacement of polling with WebSockets for true real-time interaction.
+- **Security Hardening**: Adding session and ownership validation to all server actions and API routes.
+- **Testing**: Setting up Vitest for unit and integration testing.
+- **Messenger Improvements**: Transitioning from polling to WebSockets for real-time updates.
 
 ## 2. Blocking Issues
-- **Architectural Debt**: The application relies on 3-second polling for "real-time" updates, which is inefficient and scales poorly.
+- **Architectural Debt**: Dependency on 3-second polling for updates.
+- **Configuration**: Missing `OPENAI_API_KEY` for AI chatbot features.
 
 ## 3. Today's Priorities
-1. **Verify Security**: Ensure the recently implemented data isolation and API security are robust.
-2. **Enhance Chatbot**: Consider moving from mock responses to actual OpenAI API integration.
+1. **Hardening Server Actions**: Implement session validation in `src/lib/actions.ts`.
+2. **Setup Vitest**: Configure a testing environment and write initial tests.
+3. **Zod Validation**: Implement input validation for all user-provided data.
 
 ## 4. Items Requiring Immediate Attention
-- **Testing**: Add unit and integration tests for the new messaging logic and data isolation.
+- **Security**: Ensuring data isolation is enforced across all entry points, including server actions.
 
 ## 5. Prioritized Action List
-1.  **Polling Replacement**: Evaluate and implement a real-time solution (e.g., WebSockets) to replace the current polling mechanism.
-2.  **OpenAI Integration**: Upgrade the mock chatbot to use the OpenAI API.
-3.  **Testing Suite**: Implement Jest or Vitest for unit testing core logic.
-4.  **Cleanup**: Remove any remaining unused components and address minor linting warnings.
+1.  **Server Action Security**: Refactor `sendMessage` to verify user session and conversation ownership.
+2.  **Testing Suite**: Implement Vitest for core messaging and auth logic.
+3.  **Polling Replacement**: Evaluate and implement a real-time solution (e.g., WebSockets).
+4.  **OpenAI Integration**: Upgrade mock chatbot to use OpenAI API once keys are available.
