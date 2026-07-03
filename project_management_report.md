@@ -1,20 +1,18 @@
 # Project Management Report - Messenger App
 
 ## 1. Progress Summary
-The project has successfully established a foundation for a real-time messaging application. Core features such as user authentication (JWT-based), a responsive Messenger UI, and basic database persistence using SQLite are fully functional. Current efforts are focused on shifting data fetching to the server-side to leverage Next.js 16 features and addressing critical security and architectural debt.
+The project has a solid foundation with functional Auth, Messenger UI, and persistence. Recent work focused on security hardening (Server Action protection) and setting up a Vitest testing suite. The focus is shifting toward architectural improvements and real-time capabilities.
 
 ## 2. Completed Tasks
-- **Authentication System**: Implemented secure Login, Registration, and Logout flows using custom JWT sessions and `bcryptjs` for password hashing.
-- **Messenger UI**: Developed a modern, responsive two-column layout featuring a conversation sidebar and a message window with smooth transitions.
-- **Database Integration**: Set up SQLite with tables for users, conversations, and messages, including seeding scripts for development.
-- **Message Polling**: Implemented a 3-second client-side polling mechanism to provide a near-real-time experience.
-- **Server Component Refactor**: Initial steps taken to move data fetching from the client to the server (e.g., `src/app/page.tsx`).
+- **Authentication System**: Secure JWT-based flows (Login, Register, Logout).
+- **Messenger UI**: Responsive two-column layout.
+- **Database Integration**: SQLite schema with `user_id` isolation in conversations.
+- **Security Hardening (In Progress)**: Hardened `sendMessage` Server Action with ownership checks.
+- **Testing Framework**: Vitest installed and configured with initial messaging tests.
 
 ## 3. Overdue Tasks
-- **Data Isolation Implementation**: The database schema currently lacks a `user_id` in the `conversations` table, preventing true multi-user isolation.
-- **OpenAI/Chatbot Integration**: Automated chatbot responses, as outlined in the initial blueprint, have not yet been integrated into the messaging flow.
-- **API Security Hardening**: While initial checks are in place, comprehensive session verification and data filtering are needed for all protected endpoints.
-- **Branch Consolidation**: Logic from the `messenger-improvements` branch needs to be fully integrated into the main codebase.
+- **OpenAI Integration**: Actual chatbot integration is pending (blocked by API key).
+- **WebSocket Migration**: Replacing polling with a persistent connection.
 
 ## 4. Identified Risks
 - **Security Vulnerability**: API endpoints could potentially leak data if not strictly scoped to the authenticated user's ID.
