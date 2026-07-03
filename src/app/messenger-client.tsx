@@ -40,7 +40,11 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState<User>(initialUser);
 
-  // Fetch messages when activeId changes and set up polling
+  /**
+   * Effect to fetch messages for the active conversation and establish a polling interval.
+   * Polling is used as a lightweight alternative to WebSockets to keep the UI in sync
+   * with the server every 3 seconds.
+   */
   useEffect(() => {
     if (activeId) {
       async function fetchMessages() {
@@ -54,10 +58,6 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
       }
       fetchMessages();
 
-      /**
-       * Poll for new messages every 3 seconds to provide a "real-time" feel
-       * without the complexity of WebSockets.
-       */
       const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
@@ -65,7 +65,10 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
 
   /**
    * Handles sending a new message.
-   * Implements optimistic updates for a snappier UI experience.
+   * Implements optimistic updates:
+   * 1. Generates a temporary ID and adds the message to the local state immediately.
+   * 2. Calls the server-side `sendMessage` action.
+   * 3. If the server call fails, rolls back the local state by removing the optimistic message.
    */
   const handleSendMessage = async (text: string) => {
     if (!activeId) return;
