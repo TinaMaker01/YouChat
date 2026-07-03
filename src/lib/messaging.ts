@@ -29,10 +29,11 @@ export async function createMessage(conversationId: number, text: string, sender
     created_at: new Date().toISOString()
   };
 
-  // If the message is from 'me', trigger a mock chatbot response after a short delay
+  // If the message is from 'me', trigger a mock chatbot response after a short delay.
+  // Note: This is an unawaited asynchronous side-effect for demonstration purposes.
   if (sender === 'me') {
-    // In a real app, this might be a background job or an async process
-    // For this implementation, we'll simulate a response
+    // In a real app, this might be a background job, webhook, or an external AI service call.
+    // For this implementation, we simulate an asynchronous response using setTimeout.
     setTimeout(async () => {
       const responses = [
         "That's interesting! Tell me more.",

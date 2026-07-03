@@ -53,6 +53,10 @@ A modern, real-time Messenger-like chat application built with **Next.js 16 (App
     npx tsx src/db-init.ts
     ```
 
+    **Test User Credentials:**
+    - **Email:** `test@example.com`
+    - **Password:** `password`
+
 ### Development
 
 Run the development server:
@@ -69,7 +73,39 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `src/components`: Reusable UI components.
 - `src/lib`: Core logic including authentication, database utilities, and messaging.
 - `src/db-init.ts`: Database schema initialization and seeding script.
-- `src/proxy.ts`: Custom middleware for route protection.
+- `src/proxy.ts`: Custom middleware for route protection (Next.js 16 convention).
+
+## Middleware & Session Protection
+
+This project leverages Next.js 16's `proxy.ts` for centralized session management:
+- **JWT Verification:** All protected routes verify the `session` cookie using the `jose` library.
+- **Route Guards:** Automatically redirects unauthenticated users to `/login` and authenticated users away from auth pages.
+- **Protected Paths:** Root (`/`) and any `/dashboard` routes (if present) are secured by default.
+
+## API Reference
+
+The application provides several API endpoints for data management:
+
+### Conversations
+- **GET `/api/conversations`**: Retrieves all conversations for the authenticated user.
+
+### Messages
+- **GET `/api/messages?conversationId=<id>`**: Fetches all messages for a specific conversation.
+- **POST `/api/messages`**: Sends a new message (requires `conversationId` and `text` in the request body).
+
+*Note: The application also uses Next.js Server Actions (e.g., `sendMessage`) for primary UI interactions.*
+
+## User Guide
+
+### Usage
+1. **Login:** Use the provided test credentials or register a new account.
+2. **Select a Chat:** Click on a contact in the sidebar to view your message history.
+3. **Messaging:** Type a message in the input field at the bottom and press Enter or click the Send icon.
+4. **Mock Chatbot:** Notice that sending a message will trigger an automated response from our mock chatbot after a short delay.
+
+### Troubleshooting
+- **Database Errors:** If you encounter issues with data, try re-initializing the database using `npx tsx src/db-init.ts`. *Warning: This will clear all existing data.*
+- **Session Expired:** If you are redirected to the login page unexpectedly, your JWT session may have expired (7-day duration).
 
 ## Contributing
 

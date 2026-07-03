@@ -47,11 +47,12 @@ async function init() {
 
   // Seed data
   const testUserId = 'test-user-id';
+  // Seed a test user. The default password for this user is "password".
   await db.run(
     'INSERT INTO users (id, email, password) VALUES (?, ?, ?)',
     testUserId,
     'test@example.com',
-    '$2a$10$YourHashedPasswordHere' // This is just a placeholder hash for 'password'
+    '$2a$10$09Urj.xM6Xe.wGkNZKzASeGa6JlmIqPFPLiRY4Tsa8hT9X0orIFIi' // bcrypt hash for 'password'
   );
 
   await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
