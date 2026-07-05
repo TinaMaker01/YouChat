@@ -39,11 +39,15 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
   const [activeId, setActiveId] = useState<number | null>(initialConversations[0]?.id || null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState<User>(initialUser);
+  const [isTyping, setIsTyping] = useState(false);
 
   // Fetch messages when activeId changes and set up polling
   useEffect(() => {
     if (activeId) {
       async function fetchMessages() {
+        // Pause polling if the tab is not visible to save resources
+        if (document.visibilityState !== 'visible') return;
+
         try {
           const res = await fetch(`/api/messages?conversationId=${activeId}`);
           const data = await res.json();
@@ -83,7 +87,11 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
 
     try {
       // 3. Perform the actual server action
+      setIsTyping(true);
       await sendMessage(activeId, text);
+
+      // Simulate bot typing delay
+      setTimeout(() => setIsTyping(false), 2000);
 
       // 4. Update conversations list with the new last message
       setConversations(prev => prev.map(c =>
@@ -119,6 +127,7 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
           conversation={activeConversation}
           messages={messages}
           onSendMessage={handleSendMessage}
+          isTyping={isTyping}
         />
       </div>
     </main>

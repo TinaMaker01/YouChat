@@ -2,6 +2,7 @@
 
 import { createMessage } from '@/lib/messaging';
 import { revalidatePath } from 'next/cache';
+import { messageSchema } from './validations';
 
 /**
  * Server action to send a message.
@@ -13,6 +14,11 @@ import { revalidatePath } from 'next/cache';
  */
 export async function sendMessage(conversationId: number, text: string) {
   try {
+    const validation = messageSchema.safeParse({ conversationId, text });
+    if (!validation.success) {
+      throw new Error(validation.error.issues[0].message);
+    }
+
     const result = await createMessage(conversationId, text, 'me');
 
     // Revalidate the home page to update the conversation list (last message, etc.)

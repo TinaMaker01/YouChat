@@ -23,9 +23,10 @@ interface ChatWindowProps {
   conversation: Conversation | null;
   messages: Message[];
   onSendMessage: (text: string) => void;
+  isTyping?: boolean;
 }
 
-export function ChatWindow({ conversation, messages, onSendMessage }: ChatWindowProps) {
+export function ChatWindow({ conversation, messages, onSendMessage, isTyping }: ChatWindowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -97,6 +98,16 @@ export function ChatWindow({ conversation, messages, onSendMessage }: ChatWindow
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
         ))}
+        {isTyping && (
+          <div className="flex items-center gap-2 p-2 text-gray-500 italic text-sm animate-pulse">
+            <div className="flex gap-1">
+              <span className="w-1 h-1 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-1 h-1 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></span>
+            </div>
+            {conversation.name} is typing...
+          </div>
+        )}
       </div>
 
       {/* Input */}

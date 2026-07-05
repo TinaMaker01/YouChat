@@ -1,14 +1,18 @@
 import { openDb } from '@/lib/db';
 import { verifyPassword, createSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
+import { loginSchema } from '@/lib/validations';
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const body = await request.json();
+    const result = loginSchema.safeParse(body);
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400 });
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 });
     }
+
+    const { email, password } = result.data;
 
     const db = await openDb();
     const user = await db.get('SELECT * FROM users WHERE email = ?', email);

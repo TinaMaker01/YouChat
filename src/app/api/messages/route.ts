@@ -2,6 +2,7 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { createMessage } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
+import { messageSchema } from '@/lib/validations';
 
 /**
  * API route to fetch messages for a specific conversation.
@@ -56,7 +57,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { conversationId, text } = await request.json();
+    const body = await request.json();
+    const validationResult = messageSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 });
+    }
+
+    const { conversationId, text } = validationResult.data;
 
     const db = await openDb();
     // Verify conversation belongs to user
