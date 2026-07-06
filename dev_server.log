@@ -5,7 +5,7 @@
 ▲ Next.js 16.2.9 (Turbopack)
 - Local:         http://localhost:3000
 - Network:       http://192.168.0.2:3000
-✓ Ready in 517ms
+✓ Ready in 617ms
 Attention: Next.js now collects completely anonymous telemetry regarding usage.
 This information is used to shape Next.js' roadmap and prioritize features.
 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
@@ -13,76 +13,57 @@ https://nextjs.org/telemetry
 
 
 ○ Compiling /login ...
- GET /login 200 in 7.8s (next.js: 6.4s, proxy.ts: 804ms, application-code: 591ms)
- GET /register 200 in 1092ms (next.js: 1008ms, proxy.ts: 10ms, application-code: 75ms)
- GET /register 200 in 98ms (next.js: 6ms, proxy.ts: 10ms, application-code: 82ms)
- GET /register 200 in 77ms (next.js: 6ms, proxy.ts: 7ms, application-code: 64ms)
- POST /api/auth/register 200 in 762ms (next.js: 564ms, application-code: 198ms)
- GET / 200 in 1723ms (next.js: 1573ms, proxy.ts: 13ms, application-code: 137ms)
- GET / 200 in 103ms (next.js: 28ms, proxy.ts: 24ms, application-code: 51ms)
- GET /login 200 in 89ms (next.js: 6ms, proxy.ts: 7ms, application-code: 77ms)
- GET /login 200 in 82ms (next.js: 5ms, proxy.ts: 6ms, application-code: 71ms)
- POST /api/auth/login 200 in 330ms (next.js: 184ms, application-code: 147ms)
- GET / 200 in 70ms (next.js: 4ms, proxy.ts: 8ms, application-code: 58ms)
- GET / 200 in 91ms (next.js: 6ms, proxy.ts: 36ms, application-code: 49ms)
-[browser] Uncaught Error: Invalid src prop (https://api.dicebear.com/7.x/avataaars/svg?seed=Alice) on `next/image`, hostname "api.dicebear.com" is not configured under images in your `next.config.js`
-See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
-    at Array.map (<anonymous>)
-    at <unknown> (src/components/chat-sidebar.tsx:46:15)
-    at Array.map (<anonymous>)
-    at ChatSidebar (src/components/chat-sidebar.tsx:35:24)
-    at MessengerClient (src/app/messenger-client.tsx:98:9)
-    at MessengerPage (src/app/page.tsx:25:5)
-  44 |           >
-  45 |             <div className="relative">
-> 46 |               <Image
-     |               ^
-  47 |                 src={conv.avatar}
-  48 |                 alt={conv.name}
-  49 |                 width={48}
-⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
-▲ Next.js 16.2.9 (Turbopack)
-- Local:         http://localhost:3000
-- Network:       http://192.168.0.2:3000
-✓ Ready in 413ms
+ GET /login 200 in 11.8s (next.js: 10.9s, proxy.ts: 251ms, application-code: 675ms)
+ GET /login 200 in 111ms (next.js: 7ms, proxy.ts: 8ms, application-code: 97ms)
+ GET /login 200 in 86ms (next.js: 5ms, proxy.ts: 11ms, application-code: 70ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
 
- GET /login 200 in 792ms (next.js: 133ms, proxy.ts: 238ms, application-code: 421ms)
- POST /api/auth/login 200 in 289ms (next.js: 107ms, application-code: 183ms)
- GET / 200 in 148ms (next.js: 48ms, proxy.ts: 11ms, application-code: 89ms)
- GET / 200 in 100ms (next.js: 6ms, proxy.ts: 21ms, application-code: 72ms)
- GET /api/messages?conversationId=4 200 in 237ms (next.js: 222ms, application-code: 16ms)
- GET /api/messages?conversationId=4 200 in 13ms (next.js: 2ms, application-code: 10ms)
-⨯ The requested resource "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" has type "image/svg+xml" but dangerouslyAllowSVG is disabled. Consider adding the "unoptimized" property to the <Image>.
-⨯ The requested resource "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" has type "image/svg+xml" but dangerouslyAllowSVG is disabled. Consider adding the "unoptimized" property to the <Image>.
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 13ms (next.js: 4ms, application-code: 10ms)
- GET /api/messages?conversationId=4 200 in 13ms (next.js: 3ms, application-code: 10ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 14ms (next.js: 3ms, application-code: 11ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 16ms (next.js: 4ms, application-code: 12ms)
- GET /api/messages?conversationId=4 200 in 14ms (next.js: 3ms, application-code: 11ms)
- GET /api/messages?conversationId=4 200 in 13ms (next.js: 3ms, application-code: 10ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 10ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 2ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 11ms (next.js: 3ms, application-code: 9ms)
- GET /login 200 in 74ms (next.js: 3ms, proxy.ts: 7ms, application-code: 64ms)
- POST /api/auth/login 200 in 151ms (next.js: 5ms, application-code: 146ms)
- GET / 200 in 53ms (next.js: 5ms, proxy.ts: 7ms, application-code: 40ms)
- GET / 200 in 104ms (next.js: 7ms, proxy.ts: 9ms, application-code: 89ms)
- GET /api/messages?conversationId=4 200 in 17ms (next.js: 3ms, application-code: 15ms)
- GET /api/messages?conversationId=4 200 in 11ms (next.js: 2ms, application-code: 8ms)
-⨯ The requested resource "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" has type "image/svg+xml" but dangerouslyAllowSVG is disabled. Consider adding the "unoptimized" property to the <Image>.
-⨯ The requested resource "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" has type "image/svg+xml" but dangerouslyAllowSVG is disabled. Consider adding the "unoptimized" property to the <Image>.
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 13ms (next.js: 3ms, application-code: 10ms)
- GET /api/messages?conversationId=4 200 in 15ms (next.js: 3ms, application-code: 12ms)
- GET /api/messages?conversationId=4 200 in 15ms (next.js: 3ms, application-code: 12ms)
- POST / 200 in 87ms (next.js: 4ms, proxy.ts: 9ms, application-code: 74ms)
-  └─ ƒ sendMessage(4, "Hello Alice!") in 13ms src/lib/actions.ts
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 9ms)
- GET /api/messages?conversationId=4 200 in 12ms (next.js: 3ms, application-code: 10ms)
- GET /api/messages?conversationId=4 200 in 14ms (next.js: 3ms, application-code: 11ms)
- GET /api/messages?conversationId=4 200 in 16ms (next.js: 3ms, application-code: 12ms)
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary name="login/" loading={null}>
+        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+          <RedirectBoundary>
+            <RedirectErrorBoundary router={{...}}>
+              <InnerLayoutRouter url="/login" tree={[...]} params={{}} cacheNode={{rsc:{...}, ...}} segmentPath={[...]} ...>
+                <SegmentViewNode type="page" pagePath="src/login/...">
+                  <SegmentTrieNode>
+                  <ClientPageRoot Component={function LoginPage} serverProvidedParams={{...}}>
+                    <LoginPage params={Promise} searchParams={Promise}>
+                      <div className="flex flex-...">
+                        <div className="w-full max...">
+                          <h1>
+                          <form onSubmit={function handleSubmit} className="space-y-4">
+                            <div>
+                              <label>
+                              <input
+                                type="email"
+                                value=""
+                                onChange={function onChange}
+                                required={true}
+                                className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus..."
+-                               style={{caret-color:"transparent"}}
+                              >
+                            <div>
+                              <label>
+                              <input
+                                type="password"
+                                value=""
+                                onChange={function onChange}
+                                required={true}
+                                className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus..."
+-                               style={{caret-color:"transparent"}}
+                              >
+                            ...
+                          ...
+                ...
+              ...
