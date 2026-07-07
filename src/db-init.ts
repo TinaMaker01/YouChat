@@ -1,4 +1,5 @@
 import { openDb } from './lib/db';
+import bcrypt from 'bcryptjs';
 
 /**
  * Initializes the SQLite database schema and seeds it with initial data.
@@ -46,11 +47,13 @@ async function init() {
 
   // Seed data
   const testUserId = 'test-user-id';
+  const hashedPassword = await bcrypt.hash('password', 10);
+
   await db.run(
     'INSERT INTO users (id, email, password) VALUES (?, ?, ?)',
     testUserId,
     'test@example.com',
-    '$2a$10$YourHashedPasswordHere' // This is just a placeholder hash for 'password'
+    hashedPassword
   );
 
   await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
