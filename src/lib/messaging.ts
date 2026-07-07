@@ -33,17 +33,31 @@ export async function createMessage(conversationId: number, text: string, sender
   if (sender === 'me') {
     // In a real app, this might be a background job or an async process
     // For this implementation, we'll simulate a response
-    setTimeout(async () => {
-      const responses = [
-        "That's interesting! Tell me more.",
-        "I see. What do you think about that?",
-        "Got it. Is there anything else?",
-        "That makes sense. How can I help further?",
-        "I'm a chatbot, and I'm here to assist you!"
-      ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+    const botResponses = [
+      "That's interesting! Tell me more.",
+      "I see. What do you think about that?",
+      "Got it. Is there anything else?",
+      "That makes sense. How can I help further?",
+      "I'm a chatbot, and I'm here to assist you!",
+      "I'm processing your request. One moment...",
+      "Can you elaborate on that?",
+      "I understand. How does that make you feel?",
+      "That is a great point!",
+      "I'm here to help with whatever you need."
+    ];
+
+    const triggerBotResponse = async () => {
+      // Simulate typing/thinking delay between 1.5 and 3 seconds
+      const delay = Math.floor(Math.random() * 1500) + 1500;
+
+      await new Promise(resolve => setTimeout(resolve, delay));
+
+      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
       await createMessage(conversationId, randomResponse, 'them');
-    }, 1000);
+    };
+
+    // Execute bot response asynchronously without awaiting it here
+    triggerBotResponse().catch(err => console.error('Bot response error:', err));
   }
 
   return newMessage;

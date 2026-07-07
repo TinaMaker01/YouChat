@@ -1,22 +1,28 @@
-# Project Status Summary - Messenger App
+# Project Status Summary - Messenger App (Updated)
 
 ## 1. Ongoing Tasks
-- **Messenger Implementation**: The core messaging UI and basic database persistence are functional.
-- **Authentication**: Custom JWT-based authentication is implemented for login, registration, and logout.
-- **Real-time Upgrade**: Evaluating replacement of polling with WebSockets for true real-time interaction.
+- **Real-time Upgrade**: Evaluating the replacement of 3-second polling with WebSockets (e.g., Socket.io or Pusher) for true real-time interaction.
+- **Testing Suite Implementation**: Initializing the testing environment with Vitest and planning unit/integration tests for core messaging logic.
+- **UI/UX Polishing**: Optimizing image rendering using `next/image` and improving mobile responsiveness.
+- **Branch Consolidation**: Merging critical improvements from the `messenger-improvements` branch into the main codebase.
 
 ## 2. Blocking Issues
-- **Architectural Debt**: The application relies on 3-second polling for "real-time" updates, which is inefficient and scales poorly.
+- **Architectural Debt**: The application's reliance on 3-second client-side polling is inefficient and poses scalability risks.
+- **Environment Configuration**: The absence of a configured `OPENAI_API_KEY` prevents the implementation of advanced chatbot features.
 
 ## 3. Today's Priorities
-1. **Verify Security**: Ensure the recently implemented data isolation and API security are robust.
-2. **Enhance Chatbot**: Consider moving from mock responses to actual OpenAI API integration.
+1. **Verify Security**: (COMPLETED) Audited and hardened Server Actions for conversation ownership.
+2. **Enhance Chatbot**: (COMPLETED) Upgraded mock responses with randomized delays and variety.
 
 ## 4. Items Requiring Immediate Attention
-- **Testing**: Add unit and integration tests for the new messaging logic and data isolation.
+- **Testing**: (COMPLETED) Established Vitest framework and initial messaging tests.
 
-## 5. Prioritized Action List
-1.  **Polling Replacement**: Evaluate and implement a real-time solution (e.g., WebSockets) to replace the current polling mechanism.
-2.  **OpenAI Integration**: Upgrade the mock chatbot to use the OpenAI API.
-3.  **Testing Suite**: Implement Jest or Vitest for unit testing core logic.
-4.  **Cleanup**: Remove any remaining unused components and address minor linting warnings.
+## 5. Items Requiring Immediate Attention
+- **Data Isolation Verification**: Double-check that all database queries in API routes (`/api/messages`) strictly enforce `user_id` checks.
+- **Test Suite**: Add unit tests for the messaging and authentication logic to prevent regressions during the upcoming real-time upgrade.
+
+## 6. Prioritized Action List
+1. **Testing Setup**: Finalize Vitest configuration and add initial tests.
+2. **WebSocket Integration**: Design and implement the transition from polling to WebSockets.
+3. **OpenAI Integration**: Upgrade the mock chatbot once the environment configuration is finalized.
+4. **Codebase Sanitization**: Remove all unused legacy components and artifacts.
