@@ -26,7 +26,7 @@ A modern, real-time Messenger-like chat application built with **Next.js 16 (App
 ### Prerequisites
 
 - Node.js 22.22.1
-- npm 11.17.0
+- **npm 11.17.0** (This project exclusively uses `npm`. Other package managers like `yarn`, `pnpm`, or `bun` are not supported.)
 
 ### Installation
 
