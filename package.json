@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "db:init": "tsx src/db-init.ts"
+    "db:init": "tsx src/db-init.ts",
+    "preinstall": "npx only-allow npm"
   },
   "dependencies": {
     "@types/sqlite3": "^3.1.11",
