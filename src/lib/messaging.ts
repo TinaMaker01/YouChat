@@ -62,3 +62,19 @@ export async function createMessage(conversationId: number, text: string, sender
 
   return newMessage;
 }
+
+/**
+ * Verifies that a conversation belongs to a specific user.
+ * @param conversationId - The ID of the conversation.
+ * @param userId - The ID of the user.
+ * @returns A promise that resolves to true if the conversation belongs to the user, false otherwise.
+ */
+export async function verifyConversationOwnership(conversationId: number, userId: string): Promise<boolean> {
+  const db = await openDb();
+  const conversation = await db.get(
+    'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
+    conversationId,
+    userId
+  );
+  return !!conversation;
+}

@@ -31,3 +31,13 @@ npm-debug.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# local databases
+db.sqlite
+db.sqlite-journal
+
+# verification
+/home/jules/verification/
+
+# logs
+dev_server.log
