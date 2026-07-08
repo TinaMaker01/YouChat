@@ -1,6 +1,6 @@
 import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
-import { createMessage } from '@/lib/messaging';
+import { createMessage, verifyConversationOwnership } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
 
 /**
@@ -21,19 +21,14 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'conversationId is required' }, { status: 400 });
     }
 
-    const db = await openDb();
-
     // Verify conversation belongs to user
-    const conversation = await db.get(
-      'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
-      conversationId,
-      session.userId
-    );
+    const hasAccess = await verifyConversationOwnership(Number(conversationId), session.userId);
 
-    if (!conversation) {
+    if (!hasAccess) {
       return NextResponse.json({ error: 'Conversation not found or access denied' }, { status: 404 });
     }
 
+    const db = await openDb();
     const messages = await db.all(
       'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
       conversationId
@@ -58,15 +53,10 @@ export async function POST(request: Request) {
 
     const { conversationId, text } = await request.json();
 
-    const db = await openDb();
     // Verify conversation belongs to user
-    const conversation = await db.get(
-      'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
-      conversationId,
-      session.userId
-    );
+    const hasAccess = await verifyConversationOwnership(Number(conversationId), session.userId);
 
-    if (!conversation) {
+    if (!hasAccess) {
       return NextResponse.json({ error: 'Conversation not found or access denied' }, { status: 404 });
     }
 

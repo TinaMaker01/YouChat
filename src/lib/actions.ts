@@ -1,9 +1,8 @@
 'use server';
 
-import { createMessage } from '@/lib/messaging';
+import { createMessage, verifyConversationOwnership } from '@/lib/messaging';
 import { revalidatePath } from 'next/cache';
 import { getSession } from './auth';
-import { openDb } from './db';
 
 /**
  * Server action to send a message.
@@ -21,15 +20,10 @@ export async function sendMessage(conversationId: number, text: string) {
       throw new Error('Unauthorized');
     }
 
-    const db = await openDb();
     // Verify conversation belongs to user
-    const conversation = await db.get(
-      'SELECT id FROM conversations WHERE id = ? AND user_id = ?',
-      conversationId,
-      session.userId
-    );
+    const hasAccess = await verifyConversationOwnership(conversationId, session.userId);
 
-    if (!conversation) {
+    if (!hasAccess) {
       throw new Error('Conversation not found or access denied');
     }
 

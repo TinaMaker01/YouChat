@@ -55,7 +55,9 @@ export function ChatSidebar({ conversations, activeConversationId, onSelectConve
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-baseline">
                 <h3 className="font-semibold text-gray-900 dark:text-white truncate">{conv.name}</h3>
-                <span className="text-xs text-gray-500 whitespace-nowrap ml-2">1m</span>
+                <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
+                  {new Date(conv.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
               </div>
               <p className={cn(
                 "text-sm truncate",
