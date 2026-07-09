@@ -15,10 +15,11 @@ The Messenger application has successfully established a robust foundation with 
 ## 4. Today's Priorities
 1. **Security Verification**: (COMPLETED) Audited and hardened `src/lib/actions.ts` to prevent unauthorized message sending.
 2. **Code Cleanup**: (COMPLETED) Removed legacy "post" table references and verified component hygiene.
-3. **Testing Suite Setup**: (COMPLETED) Configured Vitest and implemented the first set of unit tests for `src/lib/messaging.ts`.
+3. **Testing Suite Setup**: (COMPLETED) Configured Vitest and implemented comprehensive unit and integration tests.
+4. **Data Isolation Audit**: (COMPLETED) Verified that all API routes and Server Actions correctly implement `user_id` filtering.
 
 ## 5. Items Requiring Immediate Attention
-- **Continuous Security Audit**: Ongoing verification that any new data-access logic strictly enforces session-based filtering.
+- **WebSocket Transition**: Planning the migration from polling to WebSockets.
 - **Image Performance**: Ensuring all UI components consistently use `next/image` for avatar rendering.
 
 ## 6. Prioritized Action List

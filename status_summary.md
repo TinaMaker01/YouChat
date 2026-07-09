@@ -13,16 +13,17 @@
 ## 3. Today's Priorities
 1. **Verify Security**: (COMPLETED) Audited and hardened Server Actions for conversation ownership.
 2. **Enhance Chatbot**: (COMPLETED) Upgraded mock responses with randomized delays and variety.
+3. **Data Isolation Audit**: (COMPLETED) Verified that all database queries in API routes and Server Actions strictly enforce `user_id` checks.
+4. **Expand Test Suite**: (COMPLETED) Added unit tests for authentication logic and integration tests for message API routes.
 
 ## 4. Items Requiring Immediate Attention
-- **Testing**: (COMPLETED) Established Vitest framework and initial messaging tests.
+- **Testing**: (COMPLETED) Established Vitest framework and comprehensive testing for core messaging and auth logic.
 
 ## 5. Items Requiring Immediate Attention
-- **Data Isolation Verification**: Double-check that all database queries in API routes (`/api/messages`) strictly enforce `user_id` checks.
-- **Test Suite**: Add unit tests for the messaging and authentication logic to prevent regressions during the upcoming real-time upgrade.
+- **WebSocket Integration**: Transitioning from 3-second polling to true real-time updates.
+- **OpenAI Integration**: Replacing mock chatbot logic with real AI responses.
 
 ## 6. Prioritized Action List
-1. **Testing Setup**: Finalize Vitest configuration and add initial tests.
-2. **WebSocket Integration**: Design and implement the transition from polling to WebSockets.
-3. **OpenAI Integration**: Upgrade the mock chatbot once the environment configuration is finalized.
+1. **WebSocket Integration**: Design and implement the transition from polling to WebSockets.
+2. **OpenAI Integration**: Upgrade the mock chatbot once the environment configuration is finalized.
 4. **Codebase Sanitization**: Remove all unused legacy components and artifacts.
