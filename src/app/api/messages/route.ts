@@ -5,7 +5,11 @@ import { NextResponse } from 'next/server';
 
 /**
  * API route to fetch messages for a specific conversation.
- * Requires a valid session and a conversationId query parameter.
+ *
+ * SECURITY:
+ * 1. Checks for a valid user session.
+ * 2. Verifies that the requested conversation actually belongs to the authenticated user.
+ * This prevents users from accessing messages in conversations they are not part of.
  */
 export async function GET(request: Request) {
   try {
@@ -46,8 +50,12 @@ export async function GET(request: Request) {
 }
 
 /**
- * API route to create a new message.
- * Requires a valid session.
+ * API route to create a new message in a conversation.
+ *
+ * SECURITY:
+ * 1. Checks for a valid user session.
+ * 2. Verifies that the conversation belongs to the authenticated user before allowing message insertion.
+ * 3. Enforces the sender as 'me' for messages coming from this client-side API.
  */
 export async function POST(request: Request) {
   try {
