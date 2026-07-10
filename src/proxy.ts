@@ -9,7 +9,18 @@ if (!secret && process.env.NODE_ENV === 'production') {
 const JWT_SECRET = new TextEncoder().encode(secret || 'dev-secret-at-least-32-chars-long');
 
 /**
- * Custom middleware (renamed to proxy.ts in Next.js 16) for route protection and session verification.
+ * Custom middleware for route protection and session verification.
+ *
+ * NOTE: In Next.js 16, the standard `middleware.ts` can be replaced or complemented
+ * by a custom proxy pattern (often in `src/proxy.ts`) to handle advanced routing,
+ * session verification, and request/response manipulation at the edge.
+ *
+ * This proxy function:
+ * 1. Identifies protected routes vs. public/auth routes.
+ * 2. Checks for a valid 'session' cookie (JWT).
+ * 3. Redirects unauthenticated users from protected routes to '/login'.
+ * 4. Redirects authenticated users away from '/login' or '/register' to the home page.
+ *
  * @param request - The incoming Next.js request object.
  * @returns A NextResponse object that either redirects the user or continues the request.
  */

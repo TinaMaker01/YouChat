@@ -40,7 +40,13 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState<User>(initialUser);
 
-  // Fetch messages when activeId changes and set up polling
+  /**
+   * Fetch messages when activeId changes and set up polling.
+   *
+   * Polling is used here as a lightweight alternative to WebSockets.
+   * Every 3 seconds, the client requests the latest messages for the active conversation.
+   * This provides a "near real-time" experience while keeping the server implementation simple.
+   */
   useEffect(() => {
     if (activeId) {
       async function fetchMessages() {
@@ -54,18 +60,20 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
       }
       fetchMessages();
 
-      /**
-       * Poll for new messages every 3 seconds to provide a "real-time" feel
-       * without the complexity of WebSockets.
-       */
       const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
   }, [activeId]);
 
   /**
-   * Handles sending a new message.
-   * Implements optimistic updates for a snappier UI experience.
+   * Handles sending a new message with Optimistic UI updates.
+   *
+   * Optimistic updates provide immediate feedback to the user by:
+   * 1. Adding the message to the UI before the server confirms receipt.
+   * 2. Attempting the server-side persistence.
+   * 3. Rolling back the UI state if the server request fails.
+   *
+   * This technique makes the application feel significantly faster and more responsive.
    */
   const handleSendMessage = async (text: string) => {
     if (!activeId) return;

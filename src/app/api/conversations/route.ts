@@ -2,6 +2,14 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 
+/**
+ * API route to fetch all conversations for the authenticated user.
+ *
+ * SECURITY:
+ * 1. Checks for a valid user session.
+ * 2. Filters the conversations in the database query by the authenticated user's ID.
+ * This ensures data isolation between different users.
+ */
 export async function GET() {
   try {
     const session = await getSession();

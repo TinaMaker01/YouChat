@@ -6,13 +6,18 @@ import { getSession } from './auth';
 import { openDb } from './db';
 
 /**
- * Server action to send a message.
- * It persists the message to the database and revalidates the home page path.
- * Verifies that the user has access to the conversation before sending.
- * @param conversationId - The ID of the conversation.
- * @param text - The content of the message.
- * @returns A promise that resolves to the result of the message creation.
- * @throws Error if the message creation fails or unauthorized.
+ * Server action to send a message in a conversation.
+ *
+ * This function performs the following steps:
+ * 1. Verifies the user's session.
+ * 2. Checks if the conversation exists and belongs to the authenticated user.
+ * 3. Persists the new message to the database.
+ * 4. Triggers a Next.js path revalidation for the home page to ensure the UI stays in sync.
+ *
+ * @param conversationId - The unique identifier of the conversation.
+ * @param text - The text content of the message to be sent.
+ * @returns A promise that resolves to the newly created message object.
+ * @throws Error if the user is unauthorized, the conversation is not found, or database insertion fails.
  */
 export async function sendMessage(conversationId: number, text: string) {
   try {
