@@ -50,7 +50,7 @@ async function init() {
     'INSERT INTO users (id, email, password) VALUES (?, ?, ?)',
     testUserId,
     'test@example.com',
-    '$2a$10$YourHashedPasswordHere' // This is just a placeholder hash for 'password'
+    '$2b$10$Ku7dbuTVSnaXTlODWFbTc.HgDfccIAwCvn3y8QEwqoGuiUnv77Ekq' // Hash for 'password'
   );
 
   await db.run(`INSERT INTO conversations (user_id, name, avatar, last_message) VALUES (?, ?, ?, ?)`,
