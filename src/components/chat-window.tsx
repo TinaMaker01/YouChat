@@ -94,9 +94,25 @@ export function ChatWindow({ conversation, messages, onSendMessage }: ChatWindow
           <p className="text-sm text-gray-500">Facebook · You&apos;re friends on Facebook</p>
         </div>
 
-        {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
-        ))}
+        {messages.map((msg, index) => {
+          const prevMsg = messages[index - 1];
+          const nextMsg = messages[index + 1];
+
+          const isFirstInGroup = !prevMsg || prevMsg.sender !== msg.sender;
+          const isLastInGroup = !nextMsg || nextMsg.sender !== msg.sender;
+          const showAvatar = msg.sender === 'them' && isLastInGroup;
+
+          return (
+            <MessageBubble
+              key={msg.id}
+              message={msg}
+              showAvatar={showAvatar}
+              isFirstInGroup={isFirstInGroup}
+              isLastInGroup={isLastInGroup}
+              avatar={conversation.avatar}
+            />
+          );
+        })}
       </div>
 
       {/* Input */}

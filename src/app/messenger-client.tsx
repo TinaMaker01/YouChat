@@ -39,6 +39,7 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
   const [activeId, setActiveId] = useState<number | null>(initialConversations[0]?.id || null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [user] = useState<User>(initialUser);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch messages when activeId changes and set up polling
   useEffect(() => {
@@ -98,22 +99,34 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
 
   const activeConversation = conversations.find(c => c.id === activeId) || null;
 
+  const filteredConversations = conversations.filter(c =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.last_message?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <main className="flex flex-col h-screen bg-white dark:bg-black overflow-hidden">
-      <header className="flex justify-between items-center p-4 border-b dark:border-zinc-800">
-        <h1 className="text-xl font-bold">Messenger</h1>
+      <header className="flex justify-between items-center px-4 py-2 border-b dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-md z-10">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-[#0084FF] rounded-full flex items-center justify-center text-white font-bold text-lg">
+            M
+          </div>
+          <h1 className="text-xl font-bold tracking-tight">Messenger</h1>
+        </div>
         {user && (
           <div className="flex items-center gap-4">
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">{user.email}</span>
+            <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hidden sm:block">{user.email}</span>
             <LogoutButton />
           </div>
         )}
       </header>
       <div className="flex-1 flex overflow-hidden">
         <ChatSidebar
-          conversations={conversations}
+          conversations={filteredConversations}
           activeConversationId={activeId}
           onSelectConversation={setActiveId}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
         />
         <ChatWindow
           conversation={activeConversation}
