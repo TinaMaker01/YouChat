@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn, formatRelativeTime } from '@/lib/utils';
 import Image from 'next/image';
 
 interface Conversation {
@@ -19,6 +20,12 @@ interface ChatSidebarProps {
 }
 
 export function ChatSidebar({ conversations, activeConversationId, onSelectConversation }: ChatSidebarProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredConversations = conversations.filter(conv =>
+    conv.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="w-full md:w-80 flex flex-col border-r border-gray-200 dark:border-gray-800 h-full bg-white dark:bg-black overflow-hidden">
       <div className="p-4 border-b border-gray-200 dark:border-gray-800">
@@ -27,12 +34,14 @@ export function ChatSidebar({ conversations, activeConversationId, onSelectConve
           <input
             type="text"
             placeholder="Search Messenger"
-            className="w-full p-2 bg-gray-100 dark:bg-gray-900 rounded-full text-sm outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-2 bg-gray-100 dark:bg-gray-900 rounded-full text-sm outline-none focus:ring-1 focus:ring-blue-500 transition-all"
           />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">
-        {conversations.map((conv) => (
+        {filteredConversations.map((conv) => (
           <motion.div
             key={conv.id}
             onClick={() => onSelectConversation(conv.id)}
@@ -55,7 +64,9 @@ export function ChatSidebar({ conversations, activeConversationId, onSelectConve
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-baseline">
                 <h3 className="font-semibold text-gray-900 dark:text-white truncate">{conv.name}</h3>
-                <span className="text-xs text-gray-500 whitespace-nowrap ml-2">1m</span>
+                <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
+                  {formatRelativeTime(conv.updated_at)}
+                </span>
               </div>
               <p className={cn(
                 "text-sm truncate",

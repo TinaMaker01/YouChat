@@ -2,6 +2,8 @@ import { openDb } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { createMessage } from '@/lib/messaging';
 import { NextResponse } from 'next/server';
+import { sendMessageSchema, fetchMessagesSchema } from '@/lib/validations';
+import { ZodError } from 'zod';
 
 /**
  * API route to fetch messages for a specific conversation.
@@ -15,11 +17,8 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const conversationId = searchParams.get('conversationId');
-
-    if (!conversationId) {
-      return NextResponse.json({ error: 'conversationId is required' }, { status: 400 });
-    }
+    const params = Object.fromEntries(searchParams.entries());
+    const { conversationId } = fetchMessagesSchema.parse(params);
 
     const db = await openDb();
 
@@ -40,6 +39,9 @@ export async function GET(request: Request) {
     );
     return NextResponse.json(messages);
   } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
+    }
     console.error('Failed to fetch messages:', error);
     return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
   }
@@ -56,7 +58,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { conversationId, text } = await request.json();
+    const body = await request.json();
+    const { conversationId, text } = sendMessageSchema.parse(body);
 
     const db = await openDb();
     // Verify conversation belongs to user
@@ -74,10 +77,13 @@ export async function POST(request: Request) {
     // Usually messages sent via this API are from the user
     const actualSender = 'me';
 
-    const result = await createMessage(Number(conversationId), text, actualSender);
+    const result = await createMessage(conversationId, text, actualSender);
 
     return NextResponse.json(result);
   } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
+    }
     console.error('Failed to create message:', error);
     return NextResponse.json({ error: 'Failed to create message' }, { status: 500 });
   }

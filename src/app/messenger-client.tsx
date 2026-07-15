@@ -57,8 +57,13 @@ export function MessengerClient({ initialConversations, initialUser }: Messenger
       /**
        * Poll for new messages every 3 seconds to provide a "real-time" feel
        * without the complexity of WebSockets.
+       * Logic pauses when the document is hidden to save resources.
        */
-      const interval = setInterval(fetchMessages, 3000);
+      const interval = setInterval(() => {
+        if (document.visibilityState === 'visible') {
+          fetchMessages();
+        }
+      }, 3000);
       return () => clearInterval(interval);
     }
   }, [activeId]);
