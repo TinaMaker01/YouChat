@@ -27,6 +27,7 @@ A real-time Messenger-like chat application built with Next.js 16 (App Router), 
 1.  **Set up Database & Auth:** Initialized SQLite schema and implemented custom JWT session management.
 2.  **Build Messenger UI:** Created `ChatSidebar`, `ChatWindow`, and `MessageBubble` components.
 3.  **Implement Messaging:** Integrated Server Actions and API routes for message handling.
-4.  **Security Hardening:** COMPLETED. Implemented data isolation by linking conversations to specific users and securing all API routes.
+4.  **Security Hardening:** COMPLETED. Implemented data isolation by linking conversations to specific users and securing all API routes. Verified with integration tests.
 5.  **Performance Optimization:** COMPLETED. Moved initial data fetching to Server Components (SSR) in `src/app/page.tsx`.
 6.  **Chatbot Integration:** COMPLETED. Integrated mock chatbot responses in `src/lib/messaging.ts`.
+7.  **Infrastructure & Testing:** COMPLETED. Established a robust testing environment with Vitest and added core unit/integration tests for Auth and Messaging.

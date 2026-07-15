@@ -2,27 +2,29 @@
 
 ## 1. Ongoing Tasks
 - **Real-time Upgrade**: Evaluating the replacement of 3-second polling with WebSockets (e.g., Socket.io or Pusher) for true real-time interaction.
-- **Testing Suite Implementation**: Initializing the testing environment with Vitest and planning unit/integration tests for core messaging logic.
-- **UI/UX Polishing**: Optimizing image rendering using `next/image` and improving mobile responsiveness.
-- **Branch Consolidation**: Merging critical improvements from the `messenger-improvements` branch into the main codebase.
+- **Testing Expansion**: Adding more integration tests for all API routes and UI components.
+- **UI/UX Polishing**: Finalizing mobile responsiveness and accessibility.
 
 ## 2. Blocking Issues
 - **Architectural Debt**: The application's reliance on 3-second client-side polling is inefficient and poses scalability risks.
-- **Environment Configuration**: The absence of a configured `OPENAI_API_KEY` prevents the implementation of advanced chatbot features.
+- **Environment Configuration**: The absence of a configured `OPENAI_API_KEY` prevents the implementation of advanced AI chatbot features.
 
-## 3. Today's Priorities
-1. **Verify Security**: (COMPLETED) Audited and hardened Server Actions for conversation ownership.
-2. **Enhance Chatbot**: (COMPLETED) Upgraded mock responses with randomized delays and variety.
+## 3. Accomplishments (Latest)
+1. **Testing Infrastructure Fixed**: (COMPLETED) Resolved Vitest configuration issues and established a solid testing base.
+2. **Security & Auth Tests**: (COMPLETED) Implemented unit tests for JWT authentication and integration tests for API data isolation.
+3. **Image Rendering Fix**: (COMPLETED) Resolved Next.js SVG rendering errors by enabling `dangerouslyAllowSVG`.
+4. **Linting Compliance**: (COMPLETED) Updated ESLint configuration to align with project testing practices.
 
-## 4. Items Requiring Immediate Attention
-- **Testing**: (COMPLETED) Established Vitest framework and initial messaging tests.
+## 4. Today's Priorities
+1. **WebSocket Design**: Research and draft the transition plan from polling to WebSockets.
+2. **API Audit**: Continue auditing remaining API routes (conversations, auth) for strict data isolation.
 
 ## 5. Items Requiring Immediate Attention
-- **Data Isolation Verification**: Double-check that all database queries in API routes (`/api/messages`) strictly enforce `user_id` checks.
-- **Test Suite**: Add unit tests for the messaging and authentication logic to prevent regressions during the upcoming real-time upgrade.
+- **WebSocket Integration**: This remains the top architectural priority to move beyond polling.
+- **Documentation Sync**: Ensure all reports reflect the recent stabilization and testing successes.
 
 ## 6. Prioritized Action List
-1. **Testing Setup**: Finalize Vitest configuration and add initial tests.
-2. **WebSocket Integration**: Design and implement the transition from polling to WebSockets.
-3. **OpenAI Integration**: Upgrade the mock chatbot once the environment configuration is finalized.
-4. **Codebase Sanitization**: Remove all unused legacy components and artifacts.
+1. **WebSocket Integration**: Design and implement the transition from polling to WebSockets.
+2. **OpenAI Integration**: Upgrade the mock chatbot once the environment configuration is finalized.
+3. **Codebase Sanitization**: Remove all unused legacy components and artifacts.
+4. **Comprehensive UI Testing**: Implement Playwright or Vitest Browser Mode tests for critical user flows.
