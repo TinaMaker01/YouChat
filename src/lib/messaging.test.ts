@@ -8,14 +8,14 @@ vi.mock('./db', () => ({
 }));
 
 describe('messaging.ts', () => {
-  let mockDb: any;
+  let mockDb: { run: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockDb = {
       run: vi.fn().mockResolvedValue({ lastID: 123 }),
     };
-    (openDb as any).mockResolvedValue(mockDb);
+    (openDb as vi.Mock).mockResolvedValue(mockDb);
     // Suppress console.error if needed
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
